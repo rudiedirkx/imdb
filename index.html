@@ -24,9 +24,17 @@ ul {
 	border: solid 1px #999;
 }
 
-#in li:empty:not(:first-child),
-#not-in li:empty:not(:first-child) {
-	display: none;
+.list {
+	display: block;
+}
+.list:empty:before {
+	content: "...";
+}
+.list li {
+	display: inline;
+}
+.list li:not(:first-child):before {
+	content: ",";
 }
 #in {
 	color: green;
@@ -86,15 +94,11 @@ ul {
 
 	<p>I'm looking for an actor/actress that's in these titles:</p>
 
-	<ul id=in>
-		<li></li>
-	</ul>
+	<ul class="list" id=in></ul>
 
 	<p>and not in these titles:</p>
 
-	<ul id=not-in>
-		<li></li>
-	</ul>
+	<ul class="list" id=not-in></ul>
 
 	<p><input type=submit></p>
 
