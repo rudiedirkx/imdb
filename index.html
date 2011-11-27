@@ -104,21 +104,21 @@ ul {
 
 </form>
 
-<p>Find title: <input id=q autofocus autocomplete=off></p>
+<p>Find title: <input id=q type=search autofocus autocomplete=off></p>
 
 <ul id=r></ul>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-latest.min.js"></script>
 <script>
 function addTitle(id, list) {
 	var sr = $('#search-result-' + id), display = sr.data('display')
-console.log(sr[0], display)
+//console.log(sr[0], display)
 	$('#' + list).append('<li data-id="' + id + '" class="title-' + id + '"><input type=hidden name="' + list + '[]" value="' + id + '"> ' + display + ' (<a class="removeable" href="#">x</a>)</li>')
 	$('#q').select()
 }
 function removeTitle(id, list) {
 	var q = '#' + list + ' li.title-' + id
-console.log(q)
+//console.log(q)
 	$(q).remove()
 }
 
@@ -146,7 +146,7 @@ $('#r').click(function(e) {
 	}
 })
 
-$('#q').keyup(function() {
+$('#q').on('search', function() {
 	var v = this.value.toLowerCase()
 	if ( v != this.lastValue ) {
 		this.lastValue = v
@@ -156,16 +156,16 @@ $('#q').keyup(function() {
 		if ( v ) {
 			var url = 'http://sg.media-imdb.com/suggests/' + v[0] + '/' + v + '.json'
 			window['imdb$'+v] = function(rsp) {
-console.log('results:', rsp.d)
+//console.log('results:', rsp.d)
 				var titles = onlyTitles(rsp.d)
-console.log('only titles:', titles)
+//console.log('only titles:', titles)
 				var r = $('#r').empty()
 				titles.forEach(function(t) {
 					var thumb = ''
 					if ( t.i && t.i[0] ) {
 						thumb = t.i[0].replace(/\.jpg$/, '_SX40_CR0,0,40,54_.jpg')
 					}
-console.log(thumb)
+//console.log(thumb)
 					r.append('<li id="search-result-' + t.id + '" data-display="' + t.l + ' (' + t.y + ')"><img src="' + thumb + '"> <span class="title">' + t.l + ' (' + t.y + ')</span> <span class="actions"><a data-list="in" data-id="' + t.id + '" href="#">Is in</a> | <a data-list="not-in" data-id="' + t.id + '" href="#">Is not in</a></span></li>')
 				})
 			}
