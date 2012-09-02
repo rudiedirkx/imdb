@@ -2,88 +2,90 @@
 <html>
 
 <head>
-<title>IMDb intersect</title>
-<style>
-* { margin: 0; padding: 0; }
-html {
-	font-size: 100%;
-}
-body {
-	padding: 20px;
-}
-p, ul {
-	margin: 0 0 15px;
-}
-ul {
-	padding-left: 18px;
-}
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>IMDb intersect</title>
+	<style>
+	* { margin: 0; padding: 0; }
+	html {
+		font-size: 100%;
+	}
+	body {
+		padding: 20px;
+	}
+	p, ul {
+		margin: 0 0 15px;
+	}
+	ul {
+		padding-left: 18px;
+	}
 
-#intersect {
-	float: right;
-	width: 50%;
-	border: solid 1px #999;
-}
+	#intersect {
+		float: right;
+		width: 50%;
+		border: solid 1px #999;
+	}
 
-.list {
-	display: block;
-}
-.list:empty:before {
-	content: "...";
-}
-.list li {
-	display: inline;
-}
-.list li:not(:first-child):before {
-	content: ",";
-}
-#in {
-	color: green;
-}
-#not-in {
-	color: red;
-}
+	.list {
+		display: block;
+	}
+	.list:empty:before {
+		content: "...";
+	}
+	.list li {
+		display: inline;
+	}
+	.list li:not(:first-child):before {
+		content: ",";
+	}
+	#in {
+		color: green;
+	}
+	#not-in {
+		color: red;
+	}
 
-#r {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-#r:not(:empty) {
-	border: solid 1px #000;
-	background: #eee;
-}
-#r > li {
-	padding: 3px;
-	background: #ccc;
-	line-height: 30px;
-	font-size: 1.2rem;
-}
-#r > li:not(:first-child) {
-	margin-top: 2px;
-}
-#r span {
-	display: block;
-}
-#r .actions {
-	line-height: 24px;
-	font-size: 1rem;
-}
-#r img {
-	float: left;
-	width: 40px;
-	height: 54px;
-	border: 0;
-	margin-right: 6px;
-}
+	#r {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	#r:not(:empty) {
+		border: solid 1px #000;
+		background: #eee;
+	}
+	#r > li {
+		padding: 3px;
+		background: #ccc;
+		line-height: 30px;
+		font-size: 1.2rem;
+	}
+	#r > li:not(:first-child) {
+		margin-top: 2px;
+	}
+	#r span {
+		display: block;
+	}
+	#r .actions {
+		line-height: 24px;
+		font-size: 1rem;
+	}
+	#r img {
+		float: left;
+		width: 40px;
+		height: 54px;
+		border: 0;
+		margin-right: 6px;
+	}
 
-#r > li:after {
-	content: "";
-	display: block;
-	clear: both;
-	height: 0;
-	visibility: hidden;
-}
-</style>
+	#r > li:after {
+		content: "";
+		display: block;
+		clear: both;
+		height: 0;
+		visibility: hidden;
+	}
+	</style>
 </head>
 
 <body>
@@ -112,13 +114,11 @@ ul {
 <script>
 function addTitle(id, list) {
 	var sr = $('#search-result-' + id), display = sr.data('display')
-//console.log(sr[0], display)
 	$('#' + list).append('<li data-id="' + id + '" class="title-' + id + '"><input type=hidden name="' + list + '[]" value="' + id + '"> ' + display + ' (<a class="removeable" href="#">x</a>)</li>')
 	$('#q').select()
 }
 function removeTitle(id, list) {
 	var q = '#' + list + ' li.title-' + id
-//console.log(q)
 	$(q).remove()
 }
 
@@ -128,20 +128,22 @@ function onlyTitles(results) {
 	})
 }
 
-$('#in, #not-in').click(function(e) {
-	if ( 'A' == e.target.nodeName && $(e.target).hasClass('removeable') ) {
-		e.preventDefault()
+$('#in, #not-in').on('click', 'a.removeable', function(e) {
+	e.preventDefault()
 
-		var a = e.target, li = a.parentNode, id = li.dataset.id
-		removeTitle(id, li.parentNode.id)
-	}
+	var $this = $(this),
+		$li = $this.parent(),
+		id = $li.data('id')
+	removeTitle(id, $li.parent().attr('id'))
 })
 
-$('#r').click(function(e) {
-	if ( 'A' == e.target.nodeName && e.target.dataset.list ) {
+$('#r').on('click', 'a', function(e) {
+	var $this = $(this);
+	if ( $this.data('list') ) {
 		e.preventDefault()
 
-		var a = e.target, list = a.dataset.list, id = a.dataset.id
+		var list = $this.data('list'),
+			id = $this.data('id')
 		addTitle(id, list)
 	}
 })
@@ -156,16 +158,13 @@ $('#q').on('search', function() {
 		if ( v ) {
 			var url = 'http://sg.media-imdb.com/suggests/' + v[0] + '/' + v + '.json'
 			window['imdb$'+v] = function(rsp) {
-//console.log('results:', rsp.d)
 				var titles = onlyTitles(rsp.d)
-//console.log('only titles:', titles)
 				var r = $('#r').empty()
 				titles.forEach(function(t) {
 					var thumb = ''
 					if ( t.i && t.i[0] ) {
 						thumb = t.i[0].replace(/\.jpg$/, '_SX40_CR0,0,40,54_.jpg')
 					}
-//console.log(thumb)
 					r.append('<li id="search-result-' + t.id + '" data-display="' + t.l + ' (' + t.y + ')"><img src="' + thumb + '"> <span class="title">' + t.l + ' (' + t.y + ')</span> <span class="actions"><a data-list="in" data-id="' + t.id + '" href="#">Is in</a> | <a data-list="not-in" data-id="' + t.id + '" href="#">Is not in</a></span></li>')
 				})
 			}
