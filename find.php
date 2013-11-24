@@ -1,5 +1,7 @@
 <?php
 
+$results = '';
+
 if ( isset($_GET['q']) ) {
 	$q = strtolower(trim($_GET['q']));
 	$q = preg_replace('/\W+/', '_', $q);
@@ -19,6 +21,7 @@ if ( isset($_GET['q']) ) {
 	$json = substr($jsonp, strlen($q) + 6, -1);
 	$response = json_decode($json);
 
+	$results .= '<ul>';
 	foreach ( $response->d as $object ) {
 		if ( $object->id[0] == 't' ) {
 			$uri = 'title/' . $object->id;
@@ -29,18 +32,31 @@ if ( isset($_GET['q']) ) {
 			$title = $object->l;
 		}
 
-		echo '<li>';
-		echo '<a href="http://imdb.com/' . $uri . '">';
-		echo $title;
-		echo '</a>';
-		echo '</li>';
+		$results .= '<li><a href="http://imdb.com/' . $uri . '">' . $title . '</a></li>';
 	}
+	$results .= '</ul>';
 }
 
 ?>
-<p><a href="index.html">Intersect here</a></p>
+<!doctype html>
+<html>
 
-<form action>
-	<p>Query: <input name=q value="<?= @$_GET['q'] ?>" autofocus /></p>
-	<p><input type=submit></p>
-</form>
+<head>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>IMDb quick find</title>
+</head>
+
+<body>
+	<p><a href="index.html">Intersect here</a></p>
+
+	<?= $results ?>
+
+	<form action>
+		<p>Query: <input name=q value="<?= @$_GET['q'] ?>" autofocus /></p>
+		<p><input type=submit></p>
+	</form>
+
+</body>
+
+</html>
