@@ -90,6 +90,8 @@
 
 <body>
 
+<p><a href="find.php">Quicksearch here</a></p>
+
 <iframe name=intersect id=intersect></iframe>
 
 <form action=search.php target=intersect>
@@ -149,27 +151,29 @@ $('#r').on('click', 'a', function(e) {
 })
 
 $('#q').on('search', function() {
-	var v = this.value.toLowerCase()
-	if ( v != this.lastValue ) {
-		this.lastValue = v
+	var el = this,
+		v = el.value.toLowerCase()
+	if ( v != el.lastValue ) {
+		el.lastValue = v
 
 		v = v.replace(/\W+/g, '_').replace(/_{2,}/g, '-').replace(/^_|_$/g, '')
 
 		if ( v ) {
 			var url = 'http://sg.media-imdb.com/suggests/' + v[0] + '/' + v + '.json'
-			window['imdb$'+v] = function(rsp) {
-				var titles = onlyTitles(rsp.d)
-				var r = $('#r').empty()
+			window['imdb$' + v] = function(rsp) {
+				var titles = onlyTitles(rsp.d),
+					r = $('#r').empty()
 				titles.forEach(function(t) {
-					var thumb = ''
-					if ( t.i && t.i[0] ) {
-						thumb = t.i[0].replace(/\.jpg$/, '_SX40_CR0,0,40,54_.jpg')
-					}
-					r.append('<li id="search-result-' + t.id + '" data-display="' + t.l + ' (' + t.y + ')"><img src="' + thumb + '"> <span class="title">' + t.l + ' (' + t.y + ')</span> <span class="actions"><a data-list="in" data-id="' + t.id + '" href="#">Is in</a> | <a data-list="not-in" data-id="' + t.id + '" href="#">Is not in</a></span></li>')
+					r.append('<li id="search-result-' + t.id + '" data-display="' + t.l + ' (' + t.y + ')"><span class="title">' + t.l + ' (' + t.y + ')</span> <span class="actions"><a data-list="in" data-id="' + t.id + '" href="#">Is in</a> | <a data-list="not-in" data-id="' + t.id + '" href="#">Is not in</a></span></li>')
 				})
 			}
 			var script = document.createElement('script')
 			script.src = url
+			script.onerror = function(e) {
+				// Try again, less specific
+				el.value = el.value.slice(0, -1)
+				$(el).trigger('search')
+			}
 			document.head.appendChild(script)
 		}
 	}
