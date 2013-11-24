@@ -1,7 +1,7 @@
 <?php
 
 if ( isset($_GET['q']) ) {
-	$q = $_GET['q'];
+	$q = strtolower(trim($_GET['q']));
 	$q = preg_replace('/\W+/', '_', $q);
 
 	while ( strlen($q) >= 2 ) {
