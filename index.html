@@ -41,7 +41,7 @@
 	#in {
 		color: green;
 	}
-	#not-in {
+	#not_in {
 		color: red;
 	}
 
@@ -100,9 +100,9 @@
 
 	<ul class="list" id=in></ul>
 
-	<p>and not in these titles:</p>
+	<p>and not in these titles: (<strong>ignored</strong>)</p>
 
-	<ul class="list" id=not-in></ul>
+	<ul class="list" id=not_in></ul>
 
 	<p><input type=submit></p>
 
@@ -130,7 +130,7 @@ function onlyTitles(results) {
 	})
 }
 
-$('#in, #not-in').on('click', 'a.removeable', function(e) {
+$('#in, #not_in').on('click', 'a.removeable', function(e) {
 	e.preventDefault()
 
 	var $this = $(this),
@@ -164,7 +164,7 @@ $('#q').on('search', function() {
 				var titles = onlyTitles(rsp.d),
 					r = $('#r').empty()
 				titles.forEach(function(t) {
-					r.append('<li id="search-result-' + t.id + '" data-display="' + t.l + ' (' + t.y + ')"><span class="title">' + t.l + ' (' + t.y + ')</span> <span class="actions"><a data-list="in" data-id="' + t.id + '" href="#">Is in</a> | <a data-list="not-in" data-id="' + t.id + '" href="#">Is not in</a></span></li>')
+					r.append('<li id="search-result-' + t.id + '" data-display="' + t.l + ' (' + t.y + ')"><span class="title">' + t.l + ' (' + t.y + ')</span> <span class="actions"><a data-list="in" data-id="' + t.id + '" href="#">Is in</a> | <a data-list="not_in" data-id="' + t.id + '" href="#">Is not in</a></span></li>')
 				})
 			}
 			var script = document.createElement('script')
