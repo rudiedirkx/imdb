@@ -4,6 +4,7 @@ $results = '';
 
 if ( isset($_GET['q']) ) {
 	$q = strtolower(trim($_GET['q']));
+	$q = str_replace(array("'"), '', $q);
 	$q = preg_replace('/\W+/', '_', $q);
 
 	while ( strlen($q) >= 2 ) {
