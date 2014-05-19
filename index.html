@@ -156,7 +156,7 @@ $('#q').on('search', function() {
 	if ( v != el.lastValue ) {
 		el.lastValue = v
 
-		v = v.replace(/\W+/g, '_').replace(/_{2,}/g, '-').replace(/^_|_$/g, '')
+		v = v.replace(/[\-\']/g, '').replace(/\W+/g, '_').replace(/_{2,}/g, '_').replace(/^_|_$/g, '')
 
 		if ( v ) {
 			var url = 'http://sg.media-imdb.com/suggests/' + v[0] + '/' + v + '.json'
