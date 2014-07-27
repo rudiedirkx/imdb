@@ -47,7 +47,17 @@ if ( isset($_GET['q']) ) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>IMDb quick find</title>
 	<style>
-	ul { font-size: 110%; line-height: 1.6; }
+	body, input, button {
+		font-size: 20px;
+		line-height: 1.8;
+	}
+	input {
+		padding: 10px;
+	}
+	button {
+		padding: 10px 25px;
+		font-weight: bold;
+	}
 	</style>
 </head>
 
@@ -57,8 +67,8 @@ if ( isset($_GET['q']) ) {
 	<?= $results ?>
 
 	<form action>
-		<p>Query: <input name=q value="<?= @$_GET['q'] ?>" autofocus /></p>
-		<p><input type=submit></p>
+		<p>Query: <input name=q value="<?= @$_GET['q'] ?>" /></p>
+		<p><button>Search</button></p>
 	</form>
 
 </body>
