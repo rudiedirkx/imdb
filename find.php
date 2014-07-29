@@ -24,6 +24,7 @@ if ( isset($_GET['q']) ) {
 
 	$results .= '<ul>';
 	foreach ( $response->d as $object ) {
+		$description = $object->s;
 		if ( $object->id[0] == 't' ) {
 			$uri = 'title/' . $object->id;
 			$title = $object->l . ' (' . ( @$object->y ?: '?' ) . ')';
@@ -31,9 +32,13 @@ if ( isset($_GET['q']) ) {
 		else {
 			$uri = 'name/' . $object->id;
 			$title = $object->l;
+			$description = trim(substr($description, strpos($description, ',') + 1));
 		}
 
-		$results .= '<li><a href="http://imdb.com/' . $uri . '">' . $title . '</a></li>';
+		$results .= '<li>';
+		$results .= '<a href="http://imdb.com/' . $uri . '">' . $title . '</a><br>';
+		$results .= $description;
+		$results .= '</li>';
 	}
 	$results .= '</ul>';
 }
@@ -49,7 +54,10 @@ if ( isset($_GET['q']) ) {
 	<style>
 	body, input, button {
 		font-size: 20px;
-		line-height: 1.8;
+		line-height: 1.3;
+	}
+	li {
+		margin-bottom: 5px;
 	}
 	input {
 		padding: 10px;
