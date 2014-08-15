@@ -52,6 +52,9 @@ if ( isset($_GET['q']) ) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>IMDb quick find</title>
 	<style>
+	* {
+		box-sizing: border-box;
+	}
 	body, input, button {
 		font-size: 20px;
 		line-height: 1.3;
@@ -65,6 +68,7 @@ if ( isset($_GET['q']) ) {
 	button {
 		padding: 10px 25px;
 		font-weight: bold;
+		width: 100%;
 	}
 	</style>
 </head>
