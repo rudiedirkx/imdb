@@ -22,9 +22,9 @@ if ( isset($_GET['q']) ) {
 	$json = substr($jsonp, strlen($q) + 6, -1);
 	$response = json_decode($json);
 
-	$results .= '<ul>';
+	$results .= "<ul>\n";
 	foreach ( $response->d as $object ) {
-		$description = $object->s;
+		$description = @$object->s ?: '';
 		if ( $object->id[0] == 't' ) {
 			$uri = 'title/' . $object->id;
 			$title = $object->l . ' (' . ( @$object->y ?: '?' ) . ')';
@@ -36,11 +36,13 @@ if ( isset($_GET['q']) ) {
 		}
 
 		$results .= '<li>';
-		$results .= '<a href="http://imdb.com/' . $uri . '">' . $title . '</a><br>';
-		$results .= $description;
-		$results .= '</li>';
+		$results .= '<a href="http://imdb.com/' . $uri . '">' . $title . '</a>';
+		if ( $description ) {
+			$results .= '<br>' . $description;
+		}
+		$results .= "</li>\n";
 	}
-	$results .= '</ul>';
+	$results .= "</ul>\n";
 }
 
 ?>
