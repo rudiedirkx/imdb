@@ -7,7 +7,11 @@ if ( isset($_GET['q']) ) {
 	$q = str_replace(array("'", '-'), '', $q);
 	$q = preg_replace('/\W+/', '_', $q);
 
-	while ( strlen($q) >= 2 ) {
+	if ( !$q ) {
+		exit('<p>Invalid q.</p>');
+	}
+
+	while ( strlen($q) >= 1 ) {
 		$url = 'http://sg.media-imdb.com/suggests/' . $q[0] . '/' . urlencode($q) . '.json';
 		$jsonp = @file_get_contents($url);
 		if ( $jsonp ) {
