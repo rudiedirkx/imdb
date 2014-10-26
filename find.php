@@ -85,7 +85,7 @@ if ( isset($_GET['q']) ) {
 	<?= $results ?>
 
 	<form action>
-		<p>Query: <input name=q value="<?= @$_GET['q'] ?>" /></p>
+		<p>Query: <input name=q value="<?= @$_GET['q'] ?>" autocomplete=off" /></p>
 		<p><button>Search</button></p>
 	</form>
 
