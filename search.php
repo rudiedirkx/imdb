@@ -1,71 +1,30 @@
-<?php
 
-header('Content-type: text/html; charset=utf8');
+<? $intersect = intersect($in) ?>
 
-?>
-<!doctype html>
-<html>
-
-<head>
-	<meta charset="utf-8" />
-	<title>Intersect results</title>
-	<style>
-	table {
-		border-collapse: collapse;
-	}
-	td, th {
-		padding: 4px 7px;
-		border: solid 1px #999;
-	}
-	.title, .actor {
-		font-weight: bold;
-	}
-	</style>
-</head>
-
-<body>
-<?php
-
-if ( isset($_GET['in']) ) {
-
-	$in = array_unique((array)$_GET['in']);
-	$notIn = isset($_GET['not_in']) ? (array)$_GET['not_in'] : array();
-
-	$intersect = intersect($in, $notIn);
-// var_dump($intersect);
-
-	?>
-
-	<? if ($intersect->intersects): ?>
-		<table border=1 class="results intersect-results">
+<? if ($intersect->intersects): ?>
+	<table border=1 class="results intersect-results">
+		<tr>
+			<td></td>
+			<? foreach ($intersect->titles as $code => $title): ?>
+				<td class="title"><?= html($title) ?></td>
+			<? endforeach ?>
+		</tr>
+		<? foreach ($intersect->intersects as $actorCode => $actor): ?>
 			<tr>
-				<td></td>
-				<? foreach ($intersect->titles as $code => $title): ?>
-					<td class="title"><?= html($title) ?></td>
+				<td class="actor"><a href="http://www.imdb.com/name/<?= $actorCode ?>/"><?= html($actor) ?></a></td>
+				<? foreach ($intersect->titles as $titleCode => $title): ?>
+					<td class="character"><?= html($intersect->casts[$titleCode]->characters[$actorCode]) ?></td>
 				<? endforeach ?>
 			</tr>
-			<? foreach ($intersect->intersects as $actorCode => $actor): ?>
-				<tr>
-					<td class="actor"><?= html($actor) ?></td>
-					<? foreach ($intersect->titles as $titleCode => $title): ?>
-						<td class="character"><?= html($intersect->casts[$titleCode]->characters[$actorCode]) ?></td>
-					<? endforeach ?>
-				</tr>
-			<? endforeach ?>
-		</table>
-	<? else: ?>
-		<p>No results...</p>
-	<? endif ?>
+		<? endforeach ?>
+	</table>
+<? else: ?>
+	<p>No results...</p>
+<? endif ?>
 
-	<?php
-
-}
-
-?>
-</body>
-
-</html>
 <?php
+
+
 
 function html( $html ) {
 	return htmlspecialchars($html, ENT_COMPAT, 'UTF-8');
