@@ -29,18 +29,22 @@ if ( isset($_GET['q']) ) {
 	$results .= "<ul>\n";
 	foreach ( $response->d as $object ) {
 		$description = @$object->s ?: '';
-		if ( $object->id[0] == 't' ) {
-			$uri = 'title/' . $object->id;
+		if ( strstr($object->id, '://') ) {
+			$url = $object->id;
+			$title = $object->l;
+		}
+		else if ( $object->id[0] == 't' ) {
+			$url = 'http://www.imdb.com/title/' . $object->id . '/';
 			$title = $object->l . ' (' . ( @$object->y ?: '?' ) . ')';
 		}
 		else {
-			$uri = 'name/' . $object->id;
+			$url = 'http://www.imdb.com/name/' . $object->id . '/';
 			$title = $object->l;
 			$description = trim(substr($description, strpos($description, ',') + 1));
 		}
 
 		$results .= '<li>';
-		$results .= '<a href="http://imdb.com/' . $uri . '">' . $title . '</a>';
+		$results .= '<a href="' . $url . '">' . $title . '</a>';
 		if ( $description ) {
 			$results .= '<br>' . $description;
 		}
