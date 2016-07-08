@@ -103,12 +103,6 @@ function _clean( $text ) {
 }
 
 function getHTML( $tt ) {
-	$file = __DIR__ . '/cache/' . $tt . '.html';
-	$fromCache = file_exists($file) && filemtime($file) > strtotime('-1 day');
-	if ( !$fromCache ) {
-		$url = 'http://www.imdb.com/title/' . $tt . '/fullcredits';
-		file_put_contents($file, file_get_contents($url));
-	}
-
-	return file_get_contents($file);
+	$url = 'http://www.imdb.com/title/' . $tt . '/fullcredits';
+	return file_get_contents($url);
 }
