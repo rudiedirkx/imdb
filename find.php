@@ -84,12 +84,12 @@ if ( isset($_GET['q']) ) {
 </head>
 
 <body>
-	<p><a href="index.html">Intersect here</a></p>
+	<p><a href="intersect.php">Intersect here</a></p>
 
 	<?= $results ?>
 
 	<form action>
-		<p>Query: <input name=q value="<?= @$_GET['q'] ?>" autocomplete=off" /></p>
+		<p>Query: <input name="q" value="<?= @$_GET['q'] ?>" autocomplete="off" /></p>
 		<p><button>Search</button></p>
 	</form>
 
