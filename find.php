@@ -60,6 +60,7 @@ if ( isset($_GET['q']) ) {
 <head>
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#333" />
 	<title>IMDb quick find</title>
 	<style>
 	* {
