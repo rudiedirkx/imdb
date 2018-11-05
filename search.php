@@ -1,4 +1,10 @@
+<?php
 
+use rdx\jsdom\Node;
+
+require __DIR__ . '/vendor/autoload.php';
+
+?>
 <? $intersect = intersect($in) ?>
 
 <? if ($intersect->intersects): ?>
@@ -24,8 +30,6 @@
 
 <?php
 
-
-
 function html( $html ) {
 	return htmlspecialchars($html, ENT_COMPAT, 'UTF-8');
 }
@@ -39,7 +43,6 @@ function intersect( $in, $notIn = array() ) {
 	foreach ( $in AS $tt ) {
 		$title = '';
 		$cast = getCast($tt, $title);
-// print_r($cast);
 		$titles[$tt] = $title;
 		$casts[$tt] = $cast;
 
@@ -69,33 +72,27 @@ function intersect( $in, $notIn = array() ) {
 
 function getCast( $tt, &$title = '' ) {
 	$html = getHTML($tt);
+	$dom = Node::create($html);
 
-	if ( preg_match('#<h3 itemprop="name">[\s\S]+?</h3>#i', $html, $match) ) {
-		$title = _clean($match[0]);
-// var_dump($title);
+	$title = $dom->query('h3[itemprop="name"]')->textContent;
+
+	$table = $dom->query('table.cast_list');
+
+	$actors = $characters = [];
+	foreach ( $table->children() as $tr ) {
+		$a = $tr->query('a[href^="/name/"]');
+		if ( !$a ) continue;
+
+		$href = $a['href'];
+		preg_match('#/name/([^/]+)#', $href, $match);
+		$id = $match[1];
+
+		$tds = $tr->children();
+		$actors[$id] = $tds[1]->textContent;
+		$characters[$id] = $tds[3]->textContent;
 	}
 
-	if ( preg_match('#<table class="cast_list">([\s\S]+?)</table>#i', $html, $match) ) {
-		$table = $match[1];
-
-		// preg_match_all('#itemprop="actor"[^<]+([\s\S]+?)</td>#', $table, $matches);
-		// $actors = array_map(
-
-		preg_match_all('#itemprop="actor"[\s\S]+?href="/name/(nm\d+)[^>]+>([\s\S]+?)</a>#i', $table, $matches);
-		$ids = array_map('_clean', $matches[1]);
-		$actors = array_map('_clean', $matches[2]);
-// print_r($ids);
-
-		$actors = array_combine($ids, $actors);
-// print_r($actors);
-
-		preg_match_all('#<td class="character">([\s\S]+?)(?:\(|/ \.|</td)#i', $table, $matches);
-		$characters = array_map('_clean', $matches[1]);
-		$characters = array_combine($ids, $characters);
-// print_r($characters);
-
-		return (object)compact('actors', 'characters');
-	}
+	return (object) compact('actors', 'characters');
 }
 
 function _clean( $text ) {
@@ -103,6 +100,12 @@ function _clean( $text ) {
 }
 
 function getHTML( $tt ) {
+	if ( file_exists($file = __DIR__ . '/cache/' . $tt . '.html') && filemtime($file) > time() - 600 ) {
+		return file_get_contents($file);
+	}
+
 	$url = 'http://www.imdb.com/title/' . $tt . '/fullcredits';
-	return file_get_contents($url);
+	$html = file_get_contents($url);
+	@file_put_contents($file, $html);
+	return $html;
 }

@@ -115,7 +115,7 @@ if ( !empty($_GET['in']) ) {
 
 </form>
 
-<p>Find title: <input id="q" type="search" autofocus autocomplete="off" /></p>
+<p>Find title: <input id="q" type="search" autocomplete="off" /></p>
 
 <ul id="r"></ul>
 
