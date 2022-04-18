@@ -1,56 +1,24 @@
 <?php
 
-$results = '';
+use rdx\imdb\Title;
 
+require __DIR__ . '/inc.bootstrap.php';
+
+$html = '';
 if ( isset($_GET['q']) ) {
-	$q = strtolower(trim($_GET['q']));
-	$q = str_replace(array("'", '-'), '', $q);
-	$q = preg_replace('/\W+/', '_', $q);
+	$results = $client->search($_GET['q']);
 
-	if ( !$q ) {
-		exit('<p>Invalid q.</p>');
+	$html .= "<ul>\n";
+	foreach ( $results as $object ) {
+		$html .= '<li><a href="' . $object->getUrl() . '">';
+		$html .= html($object->name);
+		if ($object instanceof Title) {
+			$html .= " ($object->year)";
+		}
+		$html .= '</a><br>' . html($object->searchInfo);
+		$html .= "</li>\n";
 	}
-
-	while ( strlen($q) >= 1 ) {
-		$url = 'http://sg.media-imdb.com/suggests/' . $q[0] . '/' . urlencode($q) . '.json';
-		$jsonp = @file_get_contents($url);
-		if ( $jsonp ) {
-			break;
-		}
-		else {
-			$q = substr($q, 0, -1);
-		}
-	}
-
-	$jsonp = trim($jsonp, ' ;');
-	$json = substr($jsonp, strlen($q) + 6, -1);
-	$response = json_decode($json);
-
-	$results .= "<ul>\n";
-	foreach ( $response->d as $object ) {
-		$description = @$object->s ?: '';
-		if ( strstr($object->id, '://') ) {
-			$url = $object->id;
-			$title = $object->l;
-		}
-		else if ( $object->id[0] == 't' ) {
-			$url = 'http://www.imdb.com/title/' . $object->id . '/';
-			$title = $object->l . ' (' . ( @$object->y ?: '?' ) . ')';
-		}
-		else {
-			$url = 'http://www.imdb.com/name/' . $object->id . '/';
-			$title = $object->l;
-			$description = trim(substr($description, strpos($description, ',') + 1));
-		}
-
-		$results .= '<li>';
-		$results .= '<a href="' . $url . '">' . $title . '</a>';
-		if ( $description ) {
-			$results .= '<br>' . $description;
-		}
-		$results .= "</li>\n";
-	}
-	$results .= "</ul>\n";
+	$html .= "</ul>\n";
 }
 
 ?>
@@ -87,7 +55,7 @@ if ( isset($_GET['q']) ) {
 <body>
 	<p><a href="intersect.php">Intersect here</a></p>
 
-	<?= $results ?>
+	<?= $html ?>
 
 	<form action>
 		<p>Query: <input name="q" value="<?= @$_GET['q'] ?>" autocomplete="off" /></p>

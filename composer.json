@@ -2,14 +2,20 @@
     "name": "rdx/imdb",
     "description": "Quicksearch & movie intersect",
     "type": "project",
-    "require": {
-        "rdx/js-dom": "^1.1"
-    },
     "license": "MIT",
     "authors": [
         {
             "name": "Rudie Dirkx",
             "email": "github@hotblocks.nl"
         }
-    ]
+    ],
+    "autoload": {
+        "files": [
+            "inc.functions.php"
+        ]
+    },
+    "require": {
+        "rdx/imdb-user-api": "dev-master",
+        "symfony/var-dumper": "^6.0"
+    }
 }
