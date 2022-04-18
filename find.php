@@ -10,12 +10,17 @@ if ( isset($_GET['q']) ) {
 
 	$html .= "<ul>\n";
 	foreach ( $results as $object ) {
-		$html .= '<li><a href="' . $object->getUrl() . '">';
+		$html .= '<li>';
+		$html .= '<a href="' . $object->getUrl() . '">';
 		$html .= html($object->name);
 		if ($object instanceof Title) {
 			$html .= " ($object->year)";
 		}
-		$html .= '</a><br>' . html($object->searchInfo);
+		$html .= '</a>';
+		if ($object instanceof Title) {
+			$html .= ' | <a href="title.php?id=' . $object->id . '">--></a>';
+		}
+		$html .= '<br>' . html($object->searchInfo);
 		$html .= "</li>\n";
 	}
 	$html .= "</ul>\n";
