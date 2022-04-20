@@ -20,6 +20,10 @@ $title = IMDB_AT_MAIN ? $client->getGraphqlTitle($_GET['id'] ?? '') : $client->g
 <p><?= html($title->plot) ?></p>
 <ul>
 	<? foreach (array_slice($title->actors, 0, 5) as $actor): ?>
-		<li><?= html($actor->person->name) ?> - <?= html($actor->character->name ?? '') ?></li>
+		<li>
+			<a href="<?= html($actor->person->getUrl()) ?>"><?= html($actor->person->name) ?></a>
+			-
+			<?= html($actor->character->name ?? '') ?>
+		</li>
 	<? endforeach ?>
 </ul>
