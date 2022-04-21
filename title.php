@@ -14,8 +14,9 @@ $title = IMDB_AT_MAIN ? $client->getGraphqlTitle($_GET['id'] ?? '') : $client->g
 	(<?= $title->year ?? 'year?' ?>)
 </h1>
 <p>
+	<?= html($title->getTypeLabel()) ?> |
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
-	<?= $title->userRating->rating ?? '?' ?> / <?= $title->rating ?? 'rating?' ?>
+	<?= $title->userRating->rating ?? '?' ?> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
 </p>
 <p><?= html($title->plot ?? 'plot?') ?></p>
 <ul>

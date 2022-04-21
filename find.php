@@ -9,6 +9,9 @@ if ( isset($_GET['q']) ) {
 	$results = $client->search($_GET['q']);
 
 	$html .= "<ul>\n";
+	if ( !count($results) ) {
+		$html .= "<li>0 results</li>\n";
+	}
 	foreach ( $results as $object ) {
 		$html .= '<li>';
 		$html .= '<a href="' . ($object instanceof Title ? 'title.php?id=' . $object->id : $object->getUrl()) . '">';
