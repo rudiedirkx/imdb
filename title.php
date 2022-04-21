@@ -11,13 +11,13 @@ $title = IMDB_AT_MAIN ? $client->getGraphqlTitle($_GET['id'] ?? '') : $client->g
 
 <h1>
 	<?= html($title->name) ?>
-	(<?= $title->year ?>)
+	(<?= $title->year ?? 'year?' ?>)
 </h1>
 <p>
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
-	<?= $title->userRating->rating ?? '?' ?> / <?= $title->rating ?>
+	<?= $title->userRating->rating ?? '?' ?> / <?= $title->rating ?? 'rating?' ?>
 </p>
-<p><?= html($title->plot) ?></p>
+<p><?= html($title->plot ?? 'plot?') ?></p>
 <ul>
 	<? foreach (array_slice($title->actors, 0, 5) as $actor): ?>
 		<li>
