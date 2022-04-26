@@ -2,8 +2,23 @@
 
 require __DIR__ . '/inc.bootstrap.php';
 
-$title = IMDB_AT_MAIN ? $client->getGraphqlTitle($_GET['id'] ?? '') : $client->getTitle($_GET['id'] ?? '');
+$title = $client->getGraphqlTitle($_GET['id'] ?? '');
+if (!$title) exit("ID not found");
 // dump($title);
+
+if (isset($_POST['rating'], $_POST['password'])) {
+	if (password_verify($_POST['password'], VOTING_PASSWORD)) {
+		$logged = file_put_contents(
+			VOTING_LOG_FILE,
+			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $title->id . ' - ' . ($title->userRating->rating ?? '_') . ' -> ' . $_POST['rating'] . "\n",
+			FILE_APPEND
+		);
+		if ($logged) {
+			$client->rateTitle($title->id, $_POST['rating']);
+		}
+	}
+	exit('OK');
+}
 
 ?>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,7 +31,7 @@ $title = IMDB_AT_MAIN ? $client->getGraphqlTitle($_GET['id'] ?? '') : $client->g
 <p>
 	<?= html($title->getTypeLabel()) ?> |
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
-	<?= $title->userRating->rating ?? '?' ?> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
+	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
 </p>
 <p><?= html($title->plot ?? 'plot?') ?></p>
 <ul>
@@ -28,3 +43,23 @@ $title = IMDB_AT_MAIN ? $client->getGraphqlTitle($_GET['id'] ?? '') : $client->g
 		</li>
 	<? endforeach ?>
 </ul>
+
+<script>
+document.querySelector('#rate').addEventListener('click', e => {
+	e.preventDefault();
+
+	const rating = prompt("What's the new rating?", '');
+	if (rating == null || !rating.match(/^(1|2|3|4|5|6|7|8|9|10)$/)) return;
+
+	const pwd = prompt("What's the password?", '');
+	if (pwd == null || pwd == '') return;
+
+	const data = new FormData;
+	data.set('rating', rating);
+	data.set('password', pwd);
+	fetch(new Request(location.href), {
+		method: 'post',
+		body: data,
+	}).then(rsp => location.reload());
+});
+</script>
