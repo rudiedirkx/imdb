@@ -34,7 +34,18 @@ if (isset($_POST['rating'], $_POST['password'])) {
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
 	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
 </p>
-<p><?= html($title->plot ?? 'plot?') ?></p>
+<p style="display: flex">
+	<? if ($title->image): ?>
+		<img
+			width="50"
+			height="<?= $title->image->getHeightForWidth(50) ?? 50 ?>"
+			data-src="<?= html($title->image->url) ?>"
+			style="border: solid 1px black; margin-right: .5em"
+			onclick="this.src = this.dataset.src; this.onclick = null"
+		/>
+	<? endif ?>
+	<span><?= html($title->plot ?? 'plot?') ?></span>
+</p>
 <ul>
 	<? foreach (array_slice($title->actors, 0, 5) as $actor): ?>
 		<li>

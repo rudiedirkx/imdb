@@ -15,8 +15,17 @@ if (!$person) exit("ID not found");
 	<?= html($person->name) ?>
 	(<?= $person->birthYear ?? '?' ?>)
 </h1>
-<p>
-	<a href="<?= html($person->getUrl()) ?>">Open in IMDB</a>
+<p style="display: flex">
+	<? if ($person->image): ?>
+		<img
+			width="50"
+			height="<?= $person->image->getHeightForWidth(50) ?? 50 ?>"
+			data-src="<?= html($person->image->url) ?>"
+			style="border: solid 1px black; margin-right: .5em"
+			onclick="this.src = this.dataset.src; this.onclick = null"
+		/>
+	<? endif ?>
+	<span><a href="<?= html($person->getUrl()) ?>">Open in IMDB</a></span>
 </p>
 
 <ul>
