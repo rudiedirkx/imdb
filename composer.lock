@@ -374,12 +374,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rudiedirkx/imdb-api-client.git",
-                "reference": "e39a987647d3c542a9ee8e68193d3cafc9715a1b"
+                "reference": "169fe621d6648bd91670ec20d198b3f13fb4f2fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rudiedirkx/imdb-api-client/zipball/e39a987647d3c542a9ee8e68193d3cafc9715a1b",
-                "reference": "e39a987647d3c542a9ee8e68193d3cafc9715a1b",
+                "url": "https://api.github.com/repos/rudiedirkx/imdb-api-client/zipball/169fe621d6648bd91670ec20d198b3f13fb4f2fc",
+                "reference": "169fe621d6648bd91670ec20d198b3f13fb4f2fc",
                 "shasum": ""
             },
             "require": {
@@ -409,7 +409,7 @@
                 "issues": "https://github.com/rudiedirkx/imdb-api-client/issues",
                 "source": "https://github.com/rudiedirkx/imdb-api-client/tree/master"
             },
-            "time": "2022-04-26T21:21:41+00:00"
+            "time": "2022-05-08T00:20:52+00:00"
         },
         {
             "name": "rdx/js-dom",

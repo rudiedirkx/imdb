@@ -21,12 +21,13 @@ if (isset($_POST['rating'], $_POST['password'])) {
 }
 
 ?>
+<title><?= html($title->name) ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#333" />
 
 <h1>
 	<?= html($title->name) ?>
-	(<?= $title->year ?? 'year?' ?>)
+	(<?= $title->getYearLabel() ?? 'year?' ?>)
 </h1>
 <p>
 	<?= html($title->getTypeLabel()) ?> |
@@ -37,7 +38,7 @@ if (isset($_POST['rating'], $_POST['password'])) {
 <ul>
 	<? foreach (array_slice($title->actors, 0, 5) as $actor): ?>
 		<li>
-			<a href="<?= html($actor->person->getUrl()) ?>"><?= html($actor->person->name) ?></a>
+			<a href="person.php?id=<?= html($actor->person->id) ?>"><?= html($actor->person->name) ?></a>
 			-
 			<?= html($actor->character->name ?? '') ?>
 		</li>

@@ -1,5 +1,6 @@
 <?php
 
+use rdx\imdb\Person;
 use rdx\imdb\Title;
 
 require __DIR__ . '/inc.bootstrap.php';
@@ -14,7 +15,15 @@ if ( isset($_GET['q']) ) {
 	}
 	foreach ( $results as $object ) {
 		$html .= '<li>';
-		$html .= '<a href="' . ($object instanceof Title ? 'title.php?id=' . $object->id : $object->getUrl()) . '">';
+		if ($object instanceof Title) {
+			$html .= '<a href="title.php?id=' . $object->id . '">';
+		}
+		elseif ($object instanceof Person) {
+			$html .= '<a href="person.php?id=' . $object->id . '">';
+		}
+		else {
+			$html .= '<a href="' . $object->getUrl() . '">';
+		}
 		$html .= html($object->getSearchResult());
 		$html .= '</a>';
 		$html .= "</li>\n";
