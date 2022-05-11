@@ -16,16 +16,17 @@ if ( isset($_GET['q']) ) {
 	foreach ( $results as $object ) {
 		$html .= '<li>';
 		if ($object instanceof Title) {
-			$html .= '<a href="title.php?id=' . $object->id . '">';
+			$html .= '<a href="title.php?id=' . $object->id . '">' . html($object->name) . '</a>';
+			$html .= ' (' . ($object->getYearLabel() ?? '?') . ')';
+			$html .= '<br>[' . ($object->getTypeLabel() ?? '?') . '] ' . html($object->searchInfo);
 		}
 		elseif ($object instanceof Person) {
-			$html .= '<a href="person.php?id=' . $object->id . '">';
+			$html .= '<a href="person.php?id=' . $object->id . '">' . html($object->name) . '</a>';
+			$html .= '<br>[PERSON] ' . html($object->searchInfo);
 		}
 		else {
-			$html .= '<a href="' . $object->getUrl() . '">';
+			$html .= '<a href="' . $object->getUrl() . '">' . html($object->getSearchResult()) . '</a>';
 		}
-		$html .= html($object->getSearchResult());
-		$html .= '</a>';
 		$html .= "</li>\n";
 	}
 	$html .= "</ul>\n";
