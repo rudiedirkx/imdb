@@ -18,8 +18,8 @@ if (!$person) exit("ID not found");
 <p style="display: flex">
 	<? if ($person->image): ?>
 		<img
-			width="50"
-			height="<?= $person->image->getHeightForWidth(50) ?? 50 ?>"
+			width="80"
+			height="<?= $person->image->getHeightForWidth(80) ?? 80 ?>"
 			data-src="<?= html($person->image->url) ?>"
 			style="border: solid 1px black; margin-right: .5em"
 			onclick="this.src = this.dataset.src; this.onclick = null"

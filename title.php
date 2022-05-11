@@ -31,6 +31,9 @@ if (isset($_POST['rating'], $_POST['password'])) {
 </h1>
 <p>
 	<?= html($title->getTypeLabel()) ?> |
+	<? if ($title->duration): ?>
+		<?= $title->getDurationLabel() ?> |
+	<? endif ?>
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
 	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
 </p>
