@@ -50,7 +50,7 @@ if (isset($_POST['rating'], $_POST['password'])) {
 	<span><?= html($title->plot ?? 'plot?') ?></span>
 </p>
 <ul>
-	<? foreach (array_slice($title->actors, 0, 5) as $actor): ?>
+	<? foreach (array_slice($title->actors, 0, 20) as $actor): ?>
 		<li>
 			<a href="person.php?id=<?= html($actor->person->id) ?>"><?= html($actor->person->name) ?></a>
 			-

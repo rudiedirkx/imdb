@@ -29,7 +29,7 @@ if (!$person) exit("ID not found");
 </p>
 
 <ul>
-	<? foreach (array_slice($person->credits, 0, 5) as $actor): ?>
+	<? foreach (array_slice($person->credits, 0, 20) as $actor): ?>
 		<li>
 			[<?= html($actor->title->getTypeLabel()) ?>]
 			<a href="title.php?id=<?= html($actor->title->id) ?>"><?= html($actor->title->name) ?></a>
