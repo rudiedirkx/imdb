@@ -12,6 +12,7 @@ if (!$person) exit("ID not found");
 <meta name="theme-color" content="#333" />
 
 <h1>
+	<a href="find.php">&lt;</a>
 	<?= html($person->name) ?>
 	(<?= $person->birthYear ?? '?' ?>)
 </h1>
@@ -36,6 +37,7 @@ if (!$person) exit("ID not found");
 			(<?= $actor->title->getYearLabel() ?? '?' ?>)
 			-
 			<?= html($actor->character->name ?? '') ?>
+			<?= get_age($person, $actor->title) ?>
 		</li>
 	<? endforeach ?>
 </ul>

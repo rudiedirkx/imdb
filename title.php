@@ -26,6 +26,7 @@ if (isset($_POST['rating'], $_POST['password'])) {
 <meta name="theme-color" content="#333" />
 
 <h1>
+	<a href="find.php">&lt;</a>
 	<?= html($title->name) ?>
 	(<?= $title->getYearLabel() ?? 'year?' ?>)
 </h1>
@@ -55,6 +56,7 @@ if (isset($_POST['rating'], $_POST['password'])) {
 			<a href="person.php?id=<?= html($actor->person->id) ?>"><?= html($actor->person->name) ?></a>
 			-
 			<?= html($actor->character->name ?? '') ?>
+			<?= get_age($actor->person, $title) ?>
 		</li>
 	<? endforeach ?>
 </ul>
