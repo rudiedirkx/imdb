@@ -6,8 +6,11 @@ $title = $client->getGraphqlTitle($_GET['id'] ?? '');
 if (!$title) exit("ID not found");
 // dump($title);
 
-if (isset($_POST['rating'], $_POST['password'])) {
-	if (password_verify($_POST['password'], VOTING_PASSWORD)) {
+$validVotedBefore = password_verify(VOTING_PASSWORD, $_COOKIE['imdb_voting_password'] ?? 'x');
+
+if (isset($_POST['rating'])) {
+	if ($validVotedBefore || password_verify($_POST['password'] ?? 'x', VOTING_PASSWORD)) {
+		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), 0);
 		$logged = file_put_contents(
 			VOTING_LOG_FILE,
 			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $title->id . ' - ' . ($title->userRating->rating ?? '_') . ' -> ' . $_POST['rating'] . "\n",
@@ -67,13 +70,15 @@ document.querySelector('#rate').addEventListener('click', e => {
 
 	const rating = prompt("What's the new rating?", '');
 	if (rating == null || !rating.match(/^(1|2|3|4|5|6|7|8|9|10)$/)) return;
-
-	const pwd = prompt("What's the password?", '');
-	if (pwd == null || pwd == '') return;
-
 	const data = new FormData;
 	data.set('rating', rating);
-	data.set('password', pwd);
+
+	<? if (!$validVotedBefore): ?>
+		const pwd = prompt("What's the password?", '');
+		if (pwd == null || pwd == '') return;
+		data.set('password', pwd);
+	<? endif ?>
+
 	fetch(new Request(location.href), {
 		method: 'post',
 		body: data,
