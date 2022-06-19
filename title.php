@@ -51,7 +51,12 @@ if (isset($_POST['rating'])) {
 			onclick="this.src = this.dataset.src; this.onclick = null"
 		/>
 	<? endif ?>
-	<span><?= html($title->plot ?? 'plot?') ?></span>
+	<span>
+		<? if (count($title->genres)): ?>
+			<?= html(implode(', ', $title->genres)) ?> |
+		<? endif ?>
+		<?= html($title->plot ?? 'plot?') ?>
+	</span>
 </p>
 <ul>
 	<? foreach (array_slice($title->actors, 0, 20) as $actor): ?>
