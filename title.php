@@ -35,6 +35,9 @@ if (isset($_POST['rating'])) {
 </h1>
 <p>
 	<?= html($title->getTypeLabel()) ?> |
+	<? if ($title->originalName): ?>
+		&quot;<?= html($title->originalName) ?>&quot; |
+	<? endif ?>
 	<? if ($title->duration): ?>
 		<?= $title->getDurationLabel() ?> |
 	<? endif ?>

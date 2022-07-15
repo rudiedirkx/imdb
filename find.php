@@ -8,6 +8,7 @@ require __DIR__ . '/inc.bootstrap.php';
 $html = '';
 if ( isset($_GET['q']) ) {
 	$results = $client->search($_GET['q']);
+// dump($results);
 
 	$html .= "<ul>\n";
 	if ( !count($results) ) {
@@ -15,6 +16,15 @@ if ( isset($_GET['q']) ) {
 	}
 	foreach ( $results as $object ) {
 		$html .= '<li>';
+		if ($object->image) {
+			$html .= '<img
+				width="' . ($object->image->getWidthForHeight(50) ?? 50) . '"
+				height="' . 50 . '"
+				data-src="' . html($object->image->url) . '"
+				style="float: left; border: solid 1px black; margin-right: .25em"
+				onclick="this.src = this.dataset.src; this.onclick = null"
+			/>';
+		}
 		if ($object instanceof Title) {
 			$html .= '<a href="title.php?id=' . $object->id . '">' . html($object->name) . '</a>';
 			$html .= ' (' . ($object->getYearLabel() ?? '?') . ')';
