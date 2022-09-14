@@ -6,11 +6,10 @@ $person = $client->getGraphqlPerson($_GET['id'] ?? '');
 if (!$person) exit("ID not found");
 // dump($person);
 
-?>
-<title><?= html($person->name) ?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#333" />
+$_title = $person->name;
+include 'tpl.header.php';
 
+?>
 <h1>
 	<a href="find.php">&lt;</a>
 	<?= html($person->name) ?>

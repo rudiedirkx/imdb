@@ -23,11 +23,10 @@ if (isset($_POST['rating'])) {
 	exit('OK');
 }
 
-?>
-<title><?= html($title->name) ?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#333" />
+$_title = $title->name;
+include 'tpl.header.php';
 
+?>
 <h1>
 	<a href="find.php">&lt;</a>
 	<?= html($title->name) ?>

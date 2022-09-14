@@ -1,87 +1,82 @@
-<!doctype html>
-<html>
+<?php
 
-<head>
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>IMDb intersect</title>
-	<style>
-	* { margin: 0; padding: 0; }
-	html {
-		font-size: 100%;
-	}
-	body {
-		padding: 20px;
-	}
-	p, ul, table, form {
-		margin: 0 0 1em;
-	}
-	ul {
-		padding-left: 2em;
-	}
+include 'tpl.header.php';
 
-	/* search */
-	.list .empty:not(:last-child) {
-		display: none;
-	}
-	#in {
-		color: green;
-	}
-	#r {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-	#r:not(:empty) {
-		border: solid 1px #000;
-		background: #eee;
-	}
-	#r > li {
-		padding: 3px;
-		background: #ccc;
-		line-height: 30px;
-		font-size: 1.2rem;
-	}
-	#r > li:not(:first-child) {
-		margin-top: 2px;
-	}
-	#r span {
-		display: block;
-	}
-	#r .actions {
-		line-height: 24px;
-		font-size: 1rem;
-	}
-	#r img {
-		float: left;
-		width: 40px;
-		height: 54px;
-		border: 0;
-		margin-right: 6px;
-	}
-	#r > li:after {
-		content: "";
-		display: block;
-		clear: both;
-		height: 0;
-		visibility: hidden;
-	}
+?>
+<style>
+* { margin: 0; padding: 0; }
+html {
+	font-size: 100%;
+}
+body {
+	padding: 20px;
+}
+p, ul, table, form {
+	margin: 0 0 1em;
+}
+ul {
+	padding-left: 2em;
+}
 
-	/* results */
-	table {
-		border-collapse: collapse;
-	}
-	td, th {
-		padding: 4px 7px;
-		border: solid 1px #999;
-	}
-	.title, .actor {
-		font-weight: bold;
-	}
-	</style>
-</head>
+/* search */
+.list .empty:not(:last-child) {
+	display: none;
+}
+#in {
+	color: green;
+}
+#r {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#r:not(:empty) {
+	border: solid 1px #000;
+	background: #eee;
+}
+#r > li {
+	padding: 3px;
+	background: #ccc;
+	line-height: 30px;
+	font-size: 1.2rem;
+}
+#r > li:not(:first-child) {
+	margin-top: 2px;
+}
+#r span {
+	display: block;
+}
+#r .actions {
+	line-height: 24px;
+	font-size: 1rem;
+}
+#r img {
+	float: left;
+	width: 40px;
+	height: 54px;
+	border: 0;
+	margin-right: 6px;
+}
+#r > li:after {
+	content: "";
+	display: block;
+	clear: both;
+	height: 0;
+	visibility: hidden;
+}
 
-<body>
+/* results */
+table {
+	border-collapse: collapse;
+}
+td, th {
+	padding: 4px 7px;
+	border: solid 1px #999;
+}
+.title, .actor {
+	font-weight: bold;
+}
+</style>
 
 <p><a href="find.php">Quicksearch here</a></p>
 
@@ -233,7 +228,3 @@ $('#q').on('search', function(e) {
 	}
 })
 </script>
-
-</body>
-
-</html>

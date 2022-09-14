@@ -42,47 +42,35 @@ if ( isset($_GET['q']) ) {
 	$html .= "</ul>\n";
 }
 
+include 'tpl.header.php';
+
 ?>
-<!doctype html>
-<html>
+<style>
+* {
+	box-sizing: border-box;
+}
+body, input, button {
+	font-size: 20px;
+	line-height: 1.3;
+}
+li {
+	margin-bottom: 5px;
+}
+input {
+	padding: 10px;
+}
+button {
+	padding: 10px 25px;
+	font-weight: bold;
+	width: 100%;
+}
+</style>
 
-<head>
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="theme-color" content="#333" />
-	<title>IMDb quick find</title>
-	<style>
-	* {
-		box-sizing: border-box;
-	}
-	body, input, button {
-		font-size: 20px;
-		line-height: 1.3;
-	}
-	li {
-		margin-bottom: 5px;
-	}
-	input {
-		padding: 10px;
-	}
-	button {
-		padding: 10px 25px;
-		font-weight: bold;
-		width: 100%;
-	}
-	</style>
-</head>
+<p><a href="intersect.php">Intersect here</a></p>
 
-<body>
-	<p><a href="intersect.php">Intersect here</a></p>
+<?= $html ?>
 
-	<?= $html ?>
-
-	<form action>
-		<p>Query: <input name="q" value="<?= @$_GET['q'] ?>" autocomplete="off" /></p>
-		<p><button>Search</button></p>
-	</form>
-
-</body>
-
-</html>
+<form action>
+	<p>Query: <input name="q" value="<?= @$_GET['q'] ?>" autocomplete="off" /></p>
+	<p><button>Search</button></p>
+</form>
