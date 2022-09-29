@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/inc.bootstrap.php';
+
 include 'tpl.header.php';
 
 ?>

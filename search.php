@@ -2,7 +2,6 @@
 
 use rdx\jsdom\Node;
 
-require __DIR__ . '/inc.bootstrap.php';
 require 'src/Intersector.php';
 require 'src/Intersection.php';
 
