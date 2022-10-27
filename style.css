@@ -1,0 +1,22 @@
+body, input {
+	font-family: sans-serif;
+	background-color: #fff;
+	color: #000;
+}
+a {
+	color: blue;
+}
+
+@media (prefers-color-scheme: dark) {
+	body, input {
+		background-color: #000;
+		color: #aaa;
+	}
+	a {
+		color: lightblue;
+	}
+	button {
+		background-color: #666;
+		color: #fff;
+	}
+}
