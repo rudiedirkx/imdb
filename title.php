@@ -8,6 +8,21 @@ if (!$title) exit("ID not found");
 
 $validVotedBefore = password_verify(VOTING_PASSWORD, $_COOKIE['imdb_voting_password'] ?? 'x');
 
+if (isset($_POST['watchlist'])) {
+	if ($validVotedBefore || password_verify($_POST['password'] ?? 'x', VOTING_PASSWORD)) {
+		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), 0);
+		$logged = file_put_contents(
+			VOTING_LOG_FILE,
+			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $title->id . ' - watchlist -> ' . intval($_POST['watchlist']) . "\n",
+			FILE_APPEND
+		);
+		if ($logged) {
+			$_POST['watchlist'] ? $client->addTitleToWatchlist($title->id) : $client->removeTitleFromWatchlist($title->id);
+		}
+	}
+	exit('OK');
+}
+
 if (isset($_POST['rating'])) {
 	if ($validVotedBefore || password_verify($_POST['password'] ?? 'x', VOTING_PASSWORD)) {
 		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), 0);
@@ -23,10 +38,22 @@ if (isset($_POST['rating'])) {
 	exit('OK');
 }
 
+$inWatchlist = $client->titleInWatchlist($title->id);
+
 $_title = $title->name;
 include 'tpl.header.php';
 
 ?>
+<style>
+[data-watchlist] {
+	font-weight: bold;
+	color: red;
+}
+[data-watchlist="1"] {
+	color: green;
+}
+</style>
+
 <h1>
 	<a href="find.php">&lt;</a>
 	<?= html($title->name) ?>
@@ -41,6 +68,7 @@ include 'tpl.header.php';
 		<?= $title->getDurationLabel() ?> |
 	<? endif ?>
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
+	<button data-watchlist="<?= (int) $inWatchlist ?>">WL</button> |
 	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
 </p>
 <p style="display: flex">
@@ -72,11 +100,31 @@ include 'tpl.header.php';
 </ul>
 
 <script>
-document.querySelector('#rate').addEventListener('click', e => {
+document.querySelector('[data-watchlist]').addEventListener('click', function(e) {
+	e.preventDefault();
+
+	const add = Number(!parseInt(this.dataset.watchlist));
+
+	const data = new FormData;
+	data.set('watchlist', add);
+
+	<? if (!$validVotedBefore): ?>
+		const pwd = prompt("What's the password?", '');
+		if (pwd == null || pwd == '') return;
+		data.set('password', pwd);
+	<? endif ?>
+
+	fetch(new Request(location.href), {
+		method: 'post',
+		body: data,
+	}).then(rsp => location.reload());
+});
+document.querySelector('#rate').addEventListener('click', function(e) {
 	e.preventDefault();
 
 	const rating = prompt("What's the new rating?", '');
 	if (rating == null || !rating.match(/^(1|2|3|4|5|6|7|8|9|10)$/)) return;
+
 	const data = new FormData;
 	data.set('rating', rating);
 
