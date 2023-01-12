@@ -10,6 +10,13 @@ $_title = $person->name;
 include 'tpl.header.php';
 
 ?>
+<style>
+.rating {
+	font-weight: bold;
+	color: green;
+}
+</style>
+
 <h1>
 	<a href="find.php">&lt;</a>
 	<?= html($person->name) ?>
@@ -34,6 +41,9 @@ include 'tpl.header.php';
 			[<?= html($actor->title->getTypeLabel()) ?>]
 			<a href="title.php?id=<?= html($actor->title->id) ?>"><?= html($actor->title->name) ?></a>
 			(<?= $actor->title->getYearLabel() ?? '?' ?>)
+			<? if ($actor->title->userRating->rating ?? 0): ?>
+				<span class="rating">&#9734;<?= $actor->title->userRating->rating ?? '?' ?></span>
+			<? endif ?>
 			-
 			<?= html($actor->character->name ?? '') ?>
 			<?= get_age($person, $actor->title) ?>
