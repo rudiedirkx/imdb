@@ -7,6 +7,14 @@ a {
 	color: blue;
 }
 
+.rating {
+	font-weight: bold;
+	color: red;
+}
+.rating.rated {
+	color: green;
+}
+
 @media (prefers-color-scheme: dark) {
 	body, input {
 		background-color: #000;

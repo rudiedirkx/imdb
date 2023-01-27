@@ -7,7 +7,7 @@ require __DIR__ . '/inc.bootstrap.php';
 
 $html = '';
 if ( isset($_GET['q']) ) {
-	$results = $client->search($_GET['q']);
+	$results = $client->searchGraphql($_GET['q']);
 // dump($results);
 
 	$html .= "<ul>\n";
@@ -28,11 +28,16 @@ if ( isset($_GET['q']) ) {
 		if ($object instanceof Title) {
 			$html .= '<a href="title.php?id=' . $object->id . '">' . html($object->name) . '</a>';
 			$html .= ' (' . ($object->getYearLabel() ?? '?') . ')';
-			$html .= '<br>[' . ($object->getTypeLabel() ?? '?') . '] ' . html($object->searchInfo);
+			if ($object->rating) {
+				$html .= ' <span class="rating ' . (($object->userRating->rating ?? 0) ? 'rated' : '') . '">';
+				$html .= '&#9734; ' . ($object->userRating->rating ?? '?') . ' / ' . $object->rating;
+				$html .= '</span>';
+			}
+			$html .= '<br>[' . ($object->getTypeLabel() ?? '?') . '] ' . html($object->getSearchInfo());
 		}
 		elseif ($object instanceof Person) {
 			$html .= '<a href="person.php?id=' . $object->id . '">' . html($object->name) . '</a>';
-			$html .= '<br>[PERSON] ' . html($object->searchInfo);
+			$html .= '<br>[PERSON] ' . html($object->getSearchInfo());
 		}
 		else {
 			$html .= '<a href="' . $object->getUrl() . '">' . html($object->getSearchResult()) . '</a>';

@@ -10,16 +10,6 @@ $_title = $person->name;
 include 'tpl.header.php';
 
 ?>
-<style>
-.rating {
-	font-weight: bold;
-	color: red;
-}
-.rating.rated {
-	color: green;
-}
-</style>
-
 <h1>
 	<a href="find.php">&lt;</a>
 	<?= html($person->name) ?>
