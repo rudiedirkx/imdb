@@ -17,5 +17,12 @@
     "require": {
         "rdx/imdb-user-api": "dev-master",
         "symfony/var-dumper": "^6.0"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.25"
+        }
     }
 }
