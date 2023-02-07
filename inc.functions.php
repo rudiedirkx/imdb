@@ -13,6 +13,6 @@ function do_redirect( $url ) {
 
 function get_age( Person $person, Title $title ) {
 	if ($person->birthYear && $title->year) {
-		return '~' . ($title->year - $person->birthYear);
+		return '(' . ($title->year - $person->birthYear) . ')';
 	}
 }

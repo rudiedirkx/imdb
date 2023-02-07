@@ -92,9 +92,9 @@ include 'tpl.header.php';
 	<? foreach (array_slice($title->actors, 0, 20) as $actor): ?>
 		<li>
 			<a href="person.php?id=<?= html($actor->person->id) ?>"><?= html($actor->person->name) ?></a>
+			<?= get_age($actor->person, $title) ?>
 			-
 			<?= html($actor->character->name ?? '') ?>
-			<?= get_age($actor->person, $title) ?>
 		</li>
 	<? endforeach ?>
 </ul>

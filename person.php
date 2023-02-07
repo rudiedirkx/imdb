@@ -34,6 +34,7 @@ include 'tpl.header.php';
 			[<?= html($actor->title->getTypeLabel()) ?>]
 			<a href="title.php?id=<?= html($actor->title->id) ?>"><?= html($actor->title->name) ?></a>
 			(<?= $actor->title->getYearLabel() ?? '?' ?>)
+			<?= get_age($person, $actor->title) ?>
 			<? if ($actor->title->rating): ?>
 				<span class="rating <?= ($actor->title->userRating->rating ?? 0) ? 'rated' : '' ?>">
 					&#9734; <?= $actor->title->userRating->rating ?? '?' ?> / <?= $actor->title->rating ?>
@@ -41,7 +42,6 @@ include 'tpl.header.php';
 			<? endif ?>
 			-
 			<?= html($actor->character->name ?? '') ?>
-			<?= get_age($person, $actor->title) ?>
 		</li>
 	<? endforeach ?>
 </ul>
