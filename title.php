@@ -2,6 +2,14 @@
 
 require __DIR__ . '/inc.bootstrap.php';
 
+if (isset($_GET['id'], $_GET['watchlist'])) {
+	$inWatchlist = $client->titleInWatchlist($_GET['id']);
+	header('Content-type: application/json; charset=utf-8');
+	exit(json_encode([
+		'watchlist' => $inWatchlist,
+	]));
+}
+
 $title = $client->getGraphqlTitle($_GET['id'] ?? '');
 if (!$title) exit("ID not found");
 // dump($title);
@@ -18,9 +26,13 @@ if (isset($_POST['watchlist'])) {
 		);
 		if ($logged) {
 			$_POST['watchlist'] ? $client->addTitleToWatchlist($title->id) : $client->removeTitleFromWatchlist($title->id);
+			header('Content-type: application/json; charset=utf-8');
+			exit(json_encode([
+				'watchlist' => (bool) $_POST['watchlist'],
+			]));
 		}
 	}
-	exit('OK');
+	exit('NOK');
 }
 
 if (isset($_POST['rating'])) {
@@ -38,18 +50,17 @@ if (isset($_POST['rating'])) {
 	exit('OK');
 }
 
-$inWatchlist = $client->titleInWatchlist($title->id);
-
 $_title = $title->name;
 include 'tpl.header.php';
 
 ?>
 <style>
-[data-watchlist] {
+[data-watchlist="0"] {
 	font-weight: bold;
 	color: red;
 }
 [data-watchlist="1"] {
+	font-weight: bold;
 	color: green;
 }
 </style>
@@ -68,7 +79,7 @@ include 'tpl.header.php';
 		<?= $title->getDurationLabel() ?> |
 	<? endif ?>
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
-	<button data-watchlist="<?= (int) $inWatchlist ?>">WL</button> |
+	<button data-watchlist>WL</button> |
 	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
 </p>
 <p style="display: flex">
@@ -100,9 +111,18 @@ include 'tpl.header.php';
 </ul>
 
 <script>
-document.querySelector('[data-watchlist]').addEventListener('click', function(e) {
+(function() {
+const btn = document.querySelector('[data-watchlist]');
+fetch(location.href + '&watchlist=').then(async rsp => {
+	const data = await rsp.json();
+	if (data.watchlist != null) {
+		btn.dataset.watchlist = Number(data.watchlist);
+	}
+});
+btn.addEventListener('click', function(e) {
 	e.preventDefault();
 
+	if (this.dataset.watchlist === '') return;
 	const add = Number(!parseInt(this.dataset.watchlist));
 
 	const data = new FormData;
@@ -117,7 +137,9 @@ document.querySelector('[data-watchlist]').addEventListener('click', function(e)
 	fetch(new Request(location.href), {
 		method: 'post',
 		body: data,
-	}).then(rsp => location.reload());
+	}).then(x => x.json()).then(data => {
+		this.dataset.watchlist = Number(data.watchlist);
+	});
 });
 document.querySelector('#rate').addEventListener('click', function(e) {
 	e.preventDefault();
@@ -139,4 +161,5 @@ document.querySelector('#rate').addEventListener('click', function(e) {
 		body: data,
 	}).then(rsp => location.reload());
 });
+})();
 </script>
