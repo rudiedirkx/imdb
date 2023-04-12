@@ -45,9 +45,13 @@ if (isset($_POST['rating'])) {
 		);
 		if ($logged) {
 			$client->rateTitle($title->id, $_POST['rating']);
+			header('Content-type: application/json; charset=utf-8');
+			exit(json_encode([
+				'rating' => (int) $_POST['rating'],
+			]));
 		}
 	}
-	exit('OK');
+	exit('NOK');
 }
 
 $_title = $title->name;
@@ -112,14 +116,25 @@ include 'tpl.header.php';
 
 <script>
 (function() {
-const btn = document.querySelector('[data-watchlist]');
+let needPassword = <?= json_encode(!$validVotedBefore) ?>;
+
+function maybeAskForPassword(data) {
+	if (needPassword) {
+		const pwd = prompt("What's the password?", '');
+		if (pwd == null || pwd == '') return false;
+		data.set('password', pwd);
+	}
+	return true;
+}
+
+const watchlistBtn = document.querySelector('[data-watchlist]');
 fetch(location.href + '&watchlist=').then(async rsp => {
 	const data = await rsp.json();
 	if (data.watchlist != null) {
-		btn.dataset.watchlist = Number(data.watchlist);
+		watchlistBtn.dataset.watchlist = Number(data.watchlist);
 	}
 });
-btn.addEventListener('click', function(e) {
+watchlistBtn.addEventListener('click', function(e) {
 	e.preventDefault();
 
 	if (this.dataset.watchlist === '') return;
@@ -128,20 +143,19 @@ btn.addEventListener('click', function(e) {
 	const data = new FormData;
 	data.set('watchlist', add);
 
-	<? if (!$validVotedBefore): ?>
-		const pwd = prompt("What's the password?", '');
-		if (pwd == null || pwd == '') return;
-		data.set('password', pwd);
-	<? endif ?>
+	if (!maybeAskForPassword(data)) return;
 
 	fetch(new Request(location.href), {
 		method: 'post',
 		body: data,
 	}).then(x => x.json()).then(data => {
 		this.dataset.watchlist = Number(data.watchlist);
+		needPassword = false;
 	});
 });
-document.querySelector('#rate').addEventListener('click', function(e) {
+
+const rateButton = document.querySelector('#rate');
+rateButton.addEventListener('click', function(e) {
 	e.preventDefault();
 
 	const rating = prompt("What's the new rating?", '');
@@ -150,16 +164,15 @@ document.querySelector('#rate').addEventListener('click', function(e) {
 	const data = new FormData;
 	data.set('rating', rating);
 
-	<? if (!$validVotedBefore): ?>
-		const pwd = prompt("What's the password?", '');
-		if (pwd == null || pwd == '') return;
-		data.set('password', pwd);
-	<? endif ?>
+	if (!maybeAskForPassword(data)) return;
 
 	fetch(new Request(location.href), {
 		method: 'post',
 		body: data,
-	}).then(rsp => location.reload());
+	}).then(x => x.json()).then(data => {
+		this.textContent = data.rating;
+		needPassword = false;
+	});
 });
 })();
 </script>
