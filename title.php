@@ -18,7 +18,7 @@ $validVotedBefore = password_verify(VOTING_PASSWORD, $_COOKIE['imdb_voting_passw
 
 if (isset($_POST['watchlist'])) {
 	if ($validVotedBefore || password_verify($_POST['password'] ?? 'x', VOTING_PASSWORD)) {
-		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), 0);
+		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), strtotime('+6 months'));
 		$logged = file_put_contents(
 			VOTING_LOG_FILE,
 			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $title->id . ' - watchlist -> ' . intval($_POST['watchlist']) . "\n",
@@ -37,7 +37,7 @@ if (isset($_POST['watchlist'])) {
 
 if (isset($_POST['rating'])) {
 	if ($validVotedBefore || password_verify($_POST['password'] ?? 'x', VOTING_PASSWORD)) {
-		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), 0);
+		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), strtotime('+6 months'));
 		$logged = file_put_contents(
 			VOTING_LOG_FILE,
 			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $title->id . ' - ' . ($title->userRating->rating ?? '_') . ' -> ' . $_POST['rating'] . "\n",
