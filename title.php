@@ -67,6 +67,20 @@ include 'tpl.header.php';
 	font-weight: bold;
 	color: green;
 }
+.working {
+	animation: sideway-wiggle linear 500ms infinite;
+}
+@keyframes sideway-wiggle {
+	0%, 100% {
+		translate: 0px 0;
+	}
+	25% {
+		translate: -3px 0;
+	}
+	75% {
+		translate: 3px 0;
+	}
+}
 </style>
 
 <h1>
@@ -145,10 +159,12 @@ watchlistBtn.addEventListener('click', function(e) {
 
 	if (!maybeAskForPassword(data)) return;
 
+	this.classList.add('working');
 	fetch(new Request(location.href), {
 		method: 'post',
 		body: data,
 	}).then(x => x.json()).then(data => {
+		this.classList.remove('working');
 		this.dataset.watchlist = Number(data.watchlist);
 		needPassword = false;
 	});
@@ -166,10 +182,12 @@ rateButton.addEventListener('click', function(e) {
 
 	if (!maybeAskForPassword(data)) return;
 
+	this.classList.add('working');
 	fetch(new Request(location.href), {
 		method: 'post',
 		body: data,
 	}).then(x => x.json()).then(data => {
+		this.classList.remove('working');
 		this.textContent = data.rating;
 		needPassword = false;
 	});
