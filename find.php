@@ -10,7 +10,7 @@ if ( isset($_GET['q']) ) {
 	$results = $client->searchGraphql($_GET['q']);
 // dump($results);
 
-	$html .= "<ul>\n";
+	$html .= "<ul class='list'>\n";
 	if ( !count($results) ) {
 		$html .= "<li>0 results</li>\n";
 	}
@@ -21,7 +21,6 @@ if ( isset($_GET['q']) ) {
 				width="' . ($object->image->getWidthForHeight(50) ?? 50) . '"
 				height="' . 50 . '"
 				data-src="' . html($object->image->url) . '"
-				style="float: left; border: solid 1px black; margin-right: .25em"
 				onclick="this.src = this.dataset.src; this.onclick = null"
 			/>';
 		}
@@ -51,16 +50,6 @@ include 'tpl.header.php';
 
 ?>
 <style>
-* {
-	box-sizing: border-box;
-}
-body, input, button {
-	font-size: 20px;
-	line-height: 1.3;
-}
-li {
-	margin-bottom: 5px;
-}
 input {
 	padding: 10px;
 }
@@ -71,7 +60,11 @@ button {
 }
 </style>
 
-<p><a href="intersect.php">Intersect here</a></p>
+<p>
+	<a href="intersect.php">Intersect</a>
+	|
+	<a href="ratings.php">Ratings</a>
+</p>
 
 <?= $html ?>
 
