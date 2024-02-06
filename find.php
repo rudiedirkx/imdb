@@ -19,11 +19,11 @@ if ( isset($_GET['q']) ) {
 		if ($object->image) {
 			$html .= '<img
 				width="' . ($object->image->getWidthForHeight(50) ?? 50) . '"
-				height="' . 50 . '"
 				data-src="' . html($object->image->url) . '"
 				onclick="this.src = this.dataset.src; this.onclick = null"
 			/>';
 		}
+		$html .= '<div class="text">';
 		if ($object instanceof Title) {
 			$html .= '<a href="title.php?id=' . $object->id . '">' . html($object->name) . '</a>';
 			$html .= ' (' . ($object->getYearLabel() ?? '?') . ')';
@@ -41,7 +41,7 @@ if ( isset($_GET['q']) ) {
 		else {
 			$html .= '<a href="' . $object->getUrl() . '">' . html($object->getSearchResult()) . '</a>';
 		}
-		$html .= "</li>\n";
+		$html .= "</div></li>\n";
 	}
 	$html .= "</ul>\n";
 }
@@ -49,26 +49,12 @@ if ( isset($_GET['q']) ) {
 include 'tpl.header.php';
 
 ?>
-<style>
-input {
-	padding: 10px;
-}
-button {
-	padding: 10px 25px;
-	font-weight: bold;
-	width: 100%;
-}
-</style>
-
 <p>
 	<a href="intersect.php">Intersect</a>
 	|
 	<a href="ratings.php">Ratings</a>
 </p>
 
-<?= $html ?>
+<?php include 'tpl.search.php'; ?>
 
-<form action>
-	<p>Query: <input name="q" value="<?= @$_GET['q'] ?>" autocomplete="off" /></p>
-	<p><button>Search</button></p>
-</form>
+<?= $html ?>

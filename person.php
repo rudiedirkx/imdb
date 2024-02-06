@@ -45,3 +45,5 @@ include 'tpl.header.php';
 		</li>
 	<? endforeach ?>
 </ul>
+
+<?php include 'tpl.search.php'; ?>

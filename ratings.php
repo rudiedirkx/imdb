@@ -10,20 +10,27 @@ $titles = $client->getTitleRatings();
 include 'tpl.header.php';
 
 ?>
+<p>
+	<a href="find.php">Quicksearch</a>
+	|
+	<a href="intersect.php">Intersect</a>
+</p>
+
 <ul class="list">
 	<? foreach ($titles as $title): ?>
-		<li style="clear: both">
+		<li>
 			<img
 				width="30"
-				height="50"
 				data-src="<?= html($title->image->url) ?>"
 				onclick="this.src = this.dataset.src; this.onclick = null"
 			/>
-			<a href="title.php?id=<?= $title->id ?>"><?= html($title->name) ?></a>
-			(<?= ($title->getYearLabel() ?? '?') ?>)
-			<span class="rating rated">&#9734; <?= $title->userRating->rating ?></span>
-			<br>
-			(on <?= date('Y-m-d', $title->userRating->ratedOn) ?>)
+			<div class="text">
+				<a href="title.php?id=<?= $title->id ?>"><?= html($title->name) ?></a>
+				(<?= ($title->getYearLabel() ?? '?') ?>)
+				<span class="rating rated">&#9734; <?= $title->userRating->rating ?></span>
+				<br>
+				(on <?= date('Y-m-d', $title->userRating->ratedOn) ?>)
+			</div>
 		</li>
 	<? endforeach ?>
 </ul>

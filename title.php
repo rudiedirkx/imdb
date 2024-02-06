@@ -128,6 +128,8 @@ include 'tpl.header.php';
 	<? endforeach ?>
 </ul>
 
+<?php include 'tpl.search.php'; ?>
+
 <script>
 (function() {
 let needPassword = <?= json_encode(!$validVotedBefore) ?>;

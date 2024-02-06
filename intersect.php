@@ -80,7 +80,11 @@ td, th {
 }
 </style>
 
-<p><a href="find.php">Quicksearch here</a></p>
+<p>
+	<a href="find.php">Quicksearch</a>
+	|
+	<a href="ratings.php">Ratings</a>
+</p>
 
 <?php
 
