@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="theme-color" content="#333" />
 	<title><?= html($_title ?? 'IMDB') ?></title>
-	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="<?= html_asset('style.css') ?>" />
 </head>
 
 <body>
