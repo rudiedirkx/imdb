@@ -118,7 +118,7 @@ include 'tpl.header.php';
 	</span>
 </p>
 <ul>
-	<? foreach (array_slice($title->actors, 0, 20) as $actor): ?>
+	<? foreach ($title->actors as $actor): ?>
 		<li>
 			<a href="person.php?id=<?= html($actor->person->id) ?>"><?= html($actor->person->name) ?></a>
 			<?= get_age($actor->person, $title) ?>

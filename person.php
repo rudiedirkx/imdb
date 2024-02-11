@@ -29,7 +29,7 @@ include 'tpl.header.php';
 </p>
 
 <ul>
-	<? foreach (array_slice($person->credits, 0, 20) as $actor): ?>
+	<? foreach ($person->credits as $actor): ?>
 		<li>
 			[<?= html($actor->title->getTypeLabel()) ?>]
 			<a href="title.php?id=<?= html($actor->title->id) ?>"><?= html($actor->title->name) ?></a>
