@@ -37,7 +37,8 @@ include 'tpl.header.php';
 			<?= get_age($person, $actor->title) ?>
 			<? if ($actor->title->rating): ?>
 				<span class="rating <?= ($actor->title->userRating->rating ?? 0) ? 'rated' : '' ?>">
-					&#9734; <?= $actor->title->userRating->rating ?? '?' ?> / <?= $actor->title->rating ?>
+					&#9734; <?= $actor->title->userRating->rating ?? '?' ?> /
+					<?= number_format($actor->title->rating ?? 0, 1) ?>
 				</span>
 			<? endif ?>
 			-

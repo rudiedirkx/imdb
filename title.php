@@ -98,7 +98,9 @@ include 'tpl.header.php';
 	<? endif ?>
 	<a href="<?= html($title->getUrl()) ?>">Open in IMDB</a> |
 	<button data-watchlist>WL</button> |
-	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> / <?= $title->rating ?? 'rating?' ?> (<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
+	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> /
+	<?= $title->rating ? number_format($title->rating, 1) : 'rating?' ?>
+	(<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
 </p>
 <p style="display: flex">
 	<? if ($title->image): ?>

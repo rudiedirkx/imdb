@@ -29,7 +29,7 @@ if ( isset($_GET['q']) ) {
 			$html .= ' (' . ($object->getYearLabel() ?? '?') . ')';
 			if ($object->rating) {
 				$html .= ' <span class="rating ' . (($object->userRating->rating ?? 0) ? 'rated' : '') . '">';
-				$html .= '&#9734; ' . ($object->userRating->rating ?? '?') . ' / ' . $object->rating;
+				$html .= '&#9734; ' . ($object->userRating->rating ?? '?') . ' / ' . number_format($object->rating ?? 0, 1);
 				$html .= '</span>';
 			}
 			$html .= '<br>[' . ($object->getTypeLabel() ?? '?') . '] ' . html($object->getSearchInfo());
