@@ -7,6 +7,7 @@ require __DIR__ . '/inc.bootstrap.php';
 $titles = $client->getTitleRatings();
 // dump($client);
 
+$_title = 'IMDB ratings';
 include 'tpl.header.php';
 
 ?>
