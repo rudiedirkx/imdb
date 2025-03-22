@@ -89,7 +89,11 @@ include 'tpl.header.php';
 	(<?= $title->getYearLabel() ?? 'year?' ?>)
 </h1>
 <p>
-	<?= html($title->getTypeLabel()) ?> |
+	<?= html($title->getTypeLabel()) ?>
+	<? if ($title->series): ?>
+		(<a href="title.php?id=<?= html($title->series->id) ?>"><?= html($title->series->name) ?></a>)
+	<? endif ?>
+	|
 	<? if ($title->originalName): ?>
 		&quot;<?= html($title->originalName) ?>&quot; |
 	<? endif ?>
@@ -129,6 +133,16 @@ include 'tpl.header.php';
 		</li>
 	<? endforeach ?>
 </ul>
+
+<? if (count($title->episodes)): ?>
+	<hr>
+	<h2>Some episodes</h2>
+	<ul>
+		<? foreach ($title->episodes as $episode): ?>
+			<li><?= html($episode->name) ?></li>
+		<? endforeach ?>
+	</ul>
+<? endif ?>
 
 <?php include 'tpl.search.php'; ?>
 
