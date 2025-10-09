@@ -28,7 +28,9 @@ include 'tpl.header.php';
 			<div class="text">
 				<a href="title.php?id=<?= $title->id ?>"><?= html($title->name) ?></a>
 				(<?= ($title->getYearLabel() ?? '?') ?>)
-				<span class="rating rated">&#9734; <?= $title->userRating->rating ?? '?' ?></span>
+				<span class="rating rated">
+					&#9734; <?= $title->userRating->rating ?? '?' ?> / <?= number_format($title->rating ?? 0, 1) ?>
+				</span>
 				<?if ($title->userRating): ?>
 					<br>
 					(on <?= date('Y-m-d', $title->userRating->ratedOn) ?>)
