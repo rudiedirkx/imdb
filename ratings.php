@@ -4,8 +4,9 @@ require __DIR__ . '/inc.bootstrap.php';
 
 // $auth = password_verify(VOTING_PASSWORD, $_COOKIE['imdb_voting_password'] ?? 'x');
 
-$titles = $client->getTitleRatings();
+$titles = $client->getRatedTitles();
 // dump($client);
+// $titles = [...$titles, ...$client->getTitleRatings(page: 2)];
 
 $_title = 'IMDB ratings';
 include 'tpl.header.php';
