@@ -1,10 +1,12 @@
 <?php
 
+use rdx\imdb\Pager;
+
 require __DIR__ . '/inc.bootstrap.php';
 
 // $auth = password_verify(VOTING_PASSWORD, $_COOKIE['imdb_voting_password'] ?? 'x');
 
-$titles = $client->getRatedTitles();
+$titles = $client->getRatedTitles(new Pager(limit: 300));
 // dump($client);
 // $titles = [...$titles, ...$client->getTitleRatings(page: 2)];
 

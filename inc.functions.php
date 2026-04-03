@@ -1,5 +1,6 @@
 <?php
 
+use rdx\imdb\Actor;
 use rdx\imdb\Person;
 use rdx\imdb\Title;
 
@@ -15,8 +16,19 @@ function do_redirect( $url ) {
 	header('Location: ' . $url);
 }
 
-function get_age( Person $person, Title $title ) {
-	if ($person->birthYear && $title->year) {
-		return '(' . ($title->year - $person->birthYear) . ')';
+function get_age( Actor $actor, ?Title $title = null, ?Person $person = null ) : string {
+	$person ??= $actor->person;
+	if (!$person->birthYear) return '';
+
+	$title ??= $actor->title;
+
+	if ($actor->fromYear && $actor->fromYear != $title->year) {
+		return sprintf('(%d in %d)', ($actor->fromYear - $person->birthYear), $actor->fromYear);
 	}
+
+	if ($title->year) {
+		return sprintf('(%d)', ($title->year - $person->birthYear));
+	}
+
+	return '';
 }

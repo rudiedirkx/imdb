@@ -90,8 +90,9 @@ include 'tpl.header.php';
 </h1>
 <p>
 	<?= html($title->getTypeLabel()) ?>
-	<? if ($title->series): ?>
-		(<a href="title.php?id=<?= html($title->series->id) ?>"><?= html($title->series->name) ?></a>)
+	<? if ($title->episode): ?>
+		<?= $title->episode->season ?>.<?= $title->episode->episode ?>
+		(<a href="title.php?id=<?= html($title->episode->series->id) ?>"><?= html($title->episode->series->name) ?></a>)
 	<? endif ?>
 	|
 	<? if ($title->originalName): ?>
@@ -124,10 +125,16 @@ include 'tpl.header.php';
 	</span>
 </p>
 <ul>
+	<? foreach ($title->directors as $person): ?>
+		<li>
+			Director:
+			<a href="person.php?id=<?= html($person->id) ?>"><?= html($person->name) ?></a>
+		</li>
+	<? endforeach ?>
 	<? foreach ($title->actors as $actor): ?>
 		<li>
 			<a href="person.php?id=<?= html($actor->person->id) ?>"><?= html($actor->person->name) ?></a>
-			<?= get_age($actor->person, $title) ?>
+			<?= get_age($actor, title: $title) ?>
 			-
 			<?= html($actor->character->name ?? '') ?>
 		</li>
@@ -139,7 +146,10 @@ include 'tpl.header.php';
 	<h2>Some episodes</h2>
 	<ul>
 		<? foreach ($title->episodes as $episode): ?>
-			<li><?= html($episode->name) ?></li>
+			<li>
+				<?= $episode->episode->season ?>.<?= $episode->episode->episode ?>
+				<a href="title.php?id=<?= $episode->id ?>"><?= html($episode->name) ?></a>
+			</li>
 		<? endforeach ?>
 	</ul>
 <? endif ?>
