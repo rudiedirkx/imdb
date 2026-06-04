@@ -125,11 +125,13 @@ include 'tpl.header.php';
 	</span>
 </p>
 <ul>
-	<? foreach ($title->directors as $person): ?>
-		<li>
-			Director:
-			<a href="person.php?id=<?= html($person->id) ?>"><?= html($person->name) ?></a>
-		</li>
+	<? foreach (['Director' => $title->directors, 'Writer' => $title->writers] as $role => $people): ?>
+		<? foreach ($people as $person): ?>
+			<li>
+				<?= $role ?>:
+				<a href="person.php?id=<?= html($person->id) ?>"><?= html($person->name) ?></a>
+			</li>
+		<? endforeach ?>
 	<? endforeach ?>
 	<? foreach ($title->actors as $actor): ?>
 		<li>
