@@ -13,7 +13,7 @@
 			</span>
 			<?if ($title->userRating): ?>
 				<br>
-				(on <?= date('Y-m-d', $title->userRating->ratedOn) ?>)
+				(rated on <?= date('Y-m-d', $title->userRating->ratedOn) ?>)
 			<? endif ?>
 		</div>
 	</li>

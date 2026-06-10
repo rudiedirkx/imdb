@@ -53,6 +53,8 @@ include 'tpl.header.php';
 	<a href="intersect.php">Intersect</a>
 	|
 	<a href="ratings.php">Ratings</a>
+	|
+	<a href="watchlist.php">Watchlist</a>
 </p>
 
 <?php include 'tpl.search.php'; ?>
