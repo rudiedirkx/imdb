@@ -14,6 +14,9 @@ include 'tpl.header.php';
 	<a href="find.php">&lt;</a>
 	<?= html($person->name) ?>
 	(<?= $person->birthYear ?? '?' ?>)
+	<? if ($person->birthYear): ?>
+		(<?= (date('Y') - $person->birthYear) ?>)
+	<? endif ?>
 </h1>
 <p style="display: flex">
 	<? if ($person->image): ?>
@@ -33,6 +36,7 @@ include 'tpl.header.php';
 		<li>
 			[<?= html($actor->title->getTypeLabel()) ?>]
 			<a href="title.php?id=<?= html($actor->title->id) ?>"><?= html($actor->title->name) ?></a>
+			<?= $actor->title->getDurationLabel() ?>
 			(<?= $actor->title->getYearLabel() ?? '?' ?>)
 			<?= get_age($actor, person: $person) ?>
 			<? if ($actor->title->rating): ?>

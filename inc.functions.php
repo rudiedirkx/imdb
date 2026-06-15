@@ -18,15 +18,17 @@ function do_redirect( $url ) {
 
 function get_age( Actor $actor, ?Title $title = null, ?Person $person = null ) : string {
 	$person ??= $actor->person;
-	if (!$person->birthYear) return '';
 
 	$title ??= $actor->title;
 
 	if ($actor->fromYear && $actor->fromYear != $title->year) {
-		return sprintf('(%d in %d)', ($actor->fromYear - $person->birthYear), $actor->fromYear);
+		if ($person->birthYear) {
+			return sprintf('(%d in %d)', ($actor->fromYear - $person->birthYear), $actor->fromYear);
+		}
+		return sprintf('(first in %d)', $actor->fromYear);
 	}
 
-	if ($title->year) {
+	if ($title->year && $person->birthYear) {
 		return sprintf('(%d)', ($title->year - $person->birthYear));
 	}
 
