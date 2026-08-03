@@ -39,6 +39,9 @@ include 'tpl.header.php';
 			<?= $actor->title->getDurationLabel() ?>
 			(<?= $actor->title->getYearLabel() ?? '?' ?>)
 			<?= get_age($actor, person: $person) ?>
+			<? if ($actor->episodes): ?>
+				(<?= $actor->episodes ?> eps)
+			<? endif ?>
 			<? if ($actor->title->rating): ?>
 				<span class="rating <?= ($actor->title->userRating->rating ?? 0) ? 'rated' : '' ?>">
 					&#9734; <?= $actor->title->userRating->rating ?? '?' ?> /
