@@ -3,10 +3,12 @@
 require __DIR__ . '/inc.bootstrap.php';
 
 if (isset($_GET['id'], $_GET['watchlist'])) {
-	$inWatchlist = $client->titleInWatchlist($_GET['id']);
+	$watchlistItem = $client->getWatchlistItem($_GET['id']);
 	header('Content-type: application/json; charset=utf-8');
 	exit(json_encode([
-		'watchlist' => $inWatchlist,
+		'watchlist' => (bool) $watchlistItem,
+		'position' => $watchlistItem?->position,
+		'notes' => $watchlistItem?->notes,
 	]));
 }
 
@@ -67,6 +69,13 @@ include 'tpl.header.php';
 	font-weight: bold;
 	color: green;
 }
+[data-watchlist="1"][data-position]::after {
+	content: " #" attr(data-position);
+}
+[data-watchlist="1"][data-notes]:not([data-notes=""]) {
+	background-color: green;
+	color: white;
+}
 .working {
 	animation: sideway-wiggle linear 500ms infinite;
 }
@@ -120,6 +129,9 @@ include 'tpl.header.php';
 	<span>
 		<? if (count($title->genres)): ?>
 			<?= html(implode(', ', $title->genres)) ?> |
+		<? endif ?>
+		<? if (count($countries = array_diff($title->countries, IGNORE_TITLE_COUNTRIES))): ?>
+			<?= html(implode(', ', $countries)) ?> |
 		<? endif ?>
 		<?= html($title->plot ?? 'plot?') ?>
 	</span>
@@ -179,6 +191,8 @@ fetch(location.href + '&watchlist=').then(async rsp => {
 	const data = await rsp.json();
 	if (data.watchlist != null) {
 		watchlistBtn.dataset.watchlist = Number(data.watchlist);
+		watchlistBtn.dataset.position = data.position;
+		watchlistBtn.dataset.notes = data.notes || '';
 	}
 });
 watchlistBtn.addEventListener('click', function(e) {

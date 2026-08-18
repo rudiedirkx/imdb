@@ -17,6 +17,9 @@
 			<? if ($item->title->genres): ?>
 				(<?= html(implode(', ', $item->title->genres)) ?>)
 			<? endif ?>
+			<? if ($item->notes): ?>
+				<br>(<em style="color: lime"><?= html($item->notes) ?></em>)
+			<? endif ?>
 		</div>
 	</li>
 <? endforeach ?>
