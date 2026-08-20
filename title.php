@@ -130,9 +130,7 @@ include 'tpl.header.php';
 		<? if (count($title->genres)): ?>
 			<?= html(implode(', ', $title->genres)) ?> |
 		<? endif ?>
-		<? if (count($countries = array_diff($title->countries, IGNORE_TITLE_COUNTRIES))): ?>
-			<?= html(implode(', ', $countries)) ?> |
-		<? endif ?>
+		<?= get_countries_and_languages($title) ?>
 		<?= html($title->plot ?? 'plot?') ?>
 	</span>
 </p>

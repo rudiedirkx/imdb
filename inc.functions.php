@@ -34,3 +34,15 @@ function get_age( Actor $actor, ?Title $title = null, ?Person $person = null ) :
 
 	return '';
 }
+
+function get_countries_and_languages( Title $title ) : string {
+	$html = '';
+	if (count($title->languages) && count($languages = array_diff($title->languages, IGNORE_TITLE_LANGUAGES))) {
+		$html .= implode(', ', $title->languages) . ' | ';
+	}
+	if (count($title->countries) && count($countries = array_diff($title->countries, IGNORE_TITLE_COUNTRIES))) {
+		$names = array_map(fn(string $name) => TITLE_COUNTRIES_MAP[$name] ?? $name, $title->countries);
+		$html .= implode(', ', $names) . ' | ';
+	}
+	return $html;
+}
