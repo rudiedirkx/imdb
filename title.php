@@ -69,7 +69,7 @@ include 'tpl.header.php';
 	font-weight: bold;
 	color: green;
 }
-[data-watchlist="1"][data-position]::after {
+[data-watchlist="1"][data-position]:not([data-position=""])::after {
 	content: " #" attr(data-position);
 }
 [data-watchlist="1"][data-notes]:not([data-notes=""]) {
@@ -189,7 +189,7 @@ fetch(location.href + '&watchlist=').then(async rsp => {
 	const data = await rsp.json();
 	if (data.watchlist != null) {
 		watchlistBtn.dataset.watchlist = Number(data.watchlist);
-		watchlistBtn.dataset.position = data.position;
+		watchlistBtn.dataset.position = data.position || '';
 		watchlistBtn.dataset.notes = data.notes || '';
 	}
 });
@@ -211,6 +211,8 @@ watchlistBtn.addEventListener('click', function(e) {
 	}).then(x => x.json()).then(data => {
 		this.classList.remove('working');
 		this.dataset.watchlist = Number(data.watchlist);
+		this.dataset.position = '';
+		this.dataset.notes = '';
 		needPassword = false;
 	});
 });
