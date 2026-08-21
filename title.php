@@ -158,7 +158,7 @@ include 'tpl.header.php';
 
 <? if (count($title->episodes)): ?>
 	<hr>
-	<h2>Some episodes</h2>
+	<h2>Some episodes (<?= $title->totalSeasons ?> seasons, <?= $title->totalEpisodes ?> episodes)</h2>
 	<ul>
 		<? foreach ($title->episodes as $episode): ?>
 			<li>
