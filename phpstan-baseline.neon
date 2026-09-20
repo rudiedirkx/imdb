@@ -1,0 +1,43 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method Intersection\:\:__construct\(\) has parameter \$characters with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Intersection.php
+
+		-
+			message: '#^Method Intersector\:\:__construct\(\) has parameter \$titles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Intersector.php
+
+		-
+			message: '#^Method Intersector\:\:intersect\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Intersector.php
+
+		-
+			message: '#^Method Intersector\:\:keyActors\(\) has parameter \$actors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Intersector.php
+
+		-
+			message: '#^Method Intersector\:\:keyActors\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Intersector.php
+
+		-
+			message: '#^Method Intersector\:\:loadActors\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Intersector.php
+
+		-
+			message: '#^Property Intersector\:\:\$actors type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Intersector.php

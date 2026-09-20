@@ -1,3 +1,8 @@
+<?php
+
+/** @var rdx\imdb\Pager $pager */
+
+?>
 <style>
 li.last-before-load {
 	background-color: yellow;

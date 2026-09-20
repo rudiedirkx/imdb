@@ -1,3 +1,8 @@
+<?php
+
+/** @var list<rdx\imdb\TitleListItem> $items */
+
+?>
 <? foreach ($items as $item): ?>
 	<li>
 		<img

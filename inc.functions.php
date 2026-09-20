@@ -1,19 +1,21 @@
 <?php
 
 use rdx\imdb\Actor;
+use rdx\imdb\Client;
 use rdx\imdb\Person;
 use rdx\imdb\Title;
 
-function html( $text ) {
+function html( ?string $text ) : string {
 	return htmlspecialchars((string)$text, ENT_QUOTES, 'UTF-8') ?: htmlspecialchars((string)$text, ENT_QUOTES, 'ISO-8859-1');
 }
 
-function html_asset( $src ) {
+function html_asset( string $src ) : string {
 	return $src . '?v=' . filemtime($src);
 }
 
-function do_redirect( $url ) {
+function do_redirect( string $url ) : never {
 	header('Location: ' . $url);
+	exit;
 }
 
 function get_age( Actor $actor, ?Title $title = null, ?Person $person = null ) : string {
@@ -45,4 +47,8 @@ function get_countries_and_languages( Title $title ) : string {
 		$html .= implode(', ', $names) . ' | ';
 	}
 	return $html;
+}
+
+function imdb() : Client {
+	return $GLOBALS['client'];
 }

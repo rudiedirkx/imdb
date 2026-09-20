@@ -1,11 +1,13 @@
 <?php
 
+/** @var array<string, string> $titles */
+
 use rdx\jsdom\Node;
 
 require 'src/Intersector.php';
 require 'src/Intersection.php';
 
-$intersector = new Intersector($client, $titles);
+$intersector = new Intersector(imdb(), $titles);
 $intersector->loadActors();
 $intersections = $intersector->intersect();
 

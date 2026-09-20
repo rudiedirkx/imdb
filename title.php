@@ -2,8 +2,10 @@
 
 require __DIR__ . '/inc.bootstrap.php';
 
-if (isset($_GET['id'], $_GET['watchlist'])) {
-	$watchlistItem = $client->getWatchlistItem($_GET['id']);
+$id = (string) ($_GET['id'] ?? '');
+
+if ($id && isset($_GET['watchlist'])) {
+	$watchlistItem = imdb()->getWatchlistItem($id);
 	header('Content-type: application/json; charset=utf-8');
 	exit(json_encode([
 		'watchlist' => (bool) $watchlistItem,
@@ -12,10 +14,6 @@ if (isset($_GET['id'], $_GET['watchlist'])) {
 	]));
 }
 
-$title = $client->getGraphqlTitle($_GET['id'] ?? '');
-if (!$title) exit("ID not found");
-// dump($title);
-
 $validVotedBefore = password_verify(VOTING_PASSWORD, $_COOKIE['imdb_voting_password'] ?? 'x');
 
 if (isset($_POST['watchlist'])) {
@@ -23,11 +21,11 @@ if (isset($_POST['watchlist'])) {
 		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), strtotime('+6 months'));
 		$logged = file_put_contents(
 			VOTING_LOG_FILE,
-			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $title->id . ' - watchlist -> ' . intval($_POST['watchlist']) . "\n",
+			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $id . ' - watchlist -> ' . intval($_POST['watchlist']) . "\n",
 			FILE_APPEND
 		);
 		if ($logged) {
-			$_POST['watchlist'] ? $client->addTitleToWatchlist($title->id) : $client->removeTitleFromWatchlist($title->id);
+			$_POST['watchlist'] ? imdb()->addTitleToWatchlist($id) : imdb()->removeTitleFromWatchlist($id);
 			header('Content-type: application/json; charset=utf-8');
 			exit(json_encode([
 				'watchlist' => (bool) $_POST['watchlist'],
@@ -37,16 +35,20 @@ if (isset($_POST['watchlist'])) {
 	exit('NOK');
 }
 
+$title = imdb()->getGraphqlTitle($id);
+if (!$title) exit("ID not found");
+// dump($title);
+
 if (isset($_POST['rating'])) {
 	if ($validVotedBefore || password_verify($_POST['password'] ?? 'x', VOTING_PASSWORD)) {
 		setcookie('imdb_voting_password', password_hash(VOTING_PASSWORD, PASSWORD_DEFAULT), strtotime('+6 months'));
 		$logged = file_put_contents(
 			VOTING_LOG_FILE,
-			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $title->id . ' - ' . ($title->userRating->rating ?? '_') . ' -> ' . $_POST['rating'] . "\n",
+			date('Y-m-d H:i:s') . ' - ' . ($_SERVER['REMOTE_ADDR'] ?? '?') . ' - ' . $id . ' - ' . ($title->userRating->rating ?? '_') . ' -> ' . $_POST['rating'] . "\n",
 			FILE_APPEND
 		);
 		if ($logged) {
-			$client->rateTitle($title->id, $_POST['rating']);
+			imdb()->rateTitle($id, $_POST['rating']);
 			header('Content-type: application/json; charset=utf-8');
 			exit(json_encode([
 				'rating' => (int) $_POST['rating'],
@@ -56,11 +58,23 @@ if (isset($_POST['rating'])) {
 	exit('NOK');
 }
 
+if ($id && isset($_GET['moreactors'])) {
+	$actorsTitle = imdb()->getGraphqlTitleActors($id, $_GET['moreactors']);
+	$title->actors = $actorsTitle->actors;
+	header('imdb-cursor: ' . $actorsTitle->moreActorsCursor);
+	include 'tpl.title-actors.php';
+	exit;
+}
+
 $_title = $title->name;
 include 'tpl.header.php';
 
 ?>
 <style>
+.genres-interests.show-interests > .genres,
+.genres-interests:not(.show-interests) > .interests {
+	display: none;
+}
 [data-watchlist="0"] {
 	font-weight: bold;
 	color: red;
@@ -78,6 +92,9 @@ include 'tpl.header.php';
 }
 .working {
 	animation: sideway-wiggle linear 500ms infinite;
+}
+li:has(button[data-cursor=""]) {
+	display: none;
 }
 @keyframes sideway-wiggle {
 	0%, 100% {
@@ -115,6 +132,9 @@ include 'tpl.header.php';
 	<button id="rate"><?= $title->userRating->rating ?? '?' ?></button> /
 	<?= $title->rating ? number_format($title->rating, 1) : 'rating?' ?>
 	(<?= $title->ratings !== null ? number_format($title->ratings, 0, '.', '_') : '?' ?>)
+	<? if ($title->metacriticRating): ?>
+		[<?= $title->metacriticRating ?>]
+	<? endif ?>
 </p>
 <p style="display: flex">
 	<? if ($title->image): ?>
@@ -127,8 +147,11 @@ include 'tpl.header.php';
 		/>
 	<? endif ?>
 	<span>
-		<? if (count($title->genres)): ?>
-			<?= html(implode(', ', $title->genres)) ?> |
+		<? if (count($title->genres) || count($title->interests)): ?>
+			<span class="genres-interests">
+				<span class="genres"><?= html(implode(', ', $title->genres)) ?></span>
+				<span class="interests"><?= html(implode(', ', $title->interests)) ?></span>
+			</span> |
 		<? endif ?>
 		<?= get_countries_and_languages($title) ?>
 		<?= html($title->plot ?? 'plot?') ?>
@@ -143,17 +166,10 @@ include 'tpl.header.php';
 			</li>
 		<? endforeach ?>
 	<? endforeach ?>
-	<? foreach ($title->actors as $actor): ?>
-		<li>
-			<a href="person.php?id=<?= html($actor->person->id) ?>"><?= html($actor->person->name) ?></a>
-			<?= get_age($actor, title: $title) ?>
-			<? if ($actor->episodes): ?>
-				(<?= $actor->episodes ?> eps)
-			<? endif ?>
-			-
-			<?= html($actor->character->name ?? '') ?>
-		</li>
-	<? endforeach ?>
+	<?php include 'tpl.title-actors.php'; ?>
+	<? if ($title->moreActorsCursor): ?>
+		<li><button id="more-actors" data-cursor="<?= html($title->moreActorsCursor) ?>">Load more actors</button></li>
+	<? endif ?>
 </ul>
 
 <? if (count($title->episodes)): ?>
@@ -184,6 +200,11 @@ function maybeAskForPassword(data) {
 	return true;
 }
 
+const genresToggle = document.querySelector('.genres-interests');
+genresToggle.addEventListener('click', function(e) {
+	this.classList.toggle('show-interests');
+});
+
 const watchlistBtn = document.querySelector('[data-watchlist]');
 fetch(location.href + '&watchlist=').then(async rsp => {
 	const data = await rsp.json();
@@ -205,10 +226,10 @@ watchlistBtn.addEventListener('click', function(e) {
 	if (!maybeAskForPassword(data)) return;
 
 	this.classList.add('working');
-	fetch(new Request(location.href), {
+	fetch(new Request(location.href, {
 		method: 'post',
 		body: data,
-	}).then(x => x.json()).then(data => {
+	})).then(x => x.json()).then(data => {
 		this.classList.remove('working');
 		this.dataset.watchlist = Number(data.watchlist);
 		this.dataset.position = '';
@@ -230,14 +251,36 @@ rateButton.addEventListener('click', function(e) {
 	if (!maybeAskForPassword(data)) return;
 
 	this.classList.add('working');
-	fetch(new Request(location.href), {
+	fetch(new Request(location.href, {
 		method: 'post',
 		body: data,
-	}).then(x => x.json()).then(data => {
+	})).then(x => x.json()).then(data => {
 		this.classList.remove('working');
 		this.textContent = data.rating;
 		needPassword = false;
 	});
+});
+
+const moreActorsButton = document.querySelector('#more-actors');
+moreActorsButton.addEventListener('click', async function(e) {
+	e.preventDefault();
+
+	const cursor = this.dataset.cursor;
+
+	this.classList.add('working');
+	const rsp = await fetch(location.href + '&moreactors=' + encodeURIComponent(cursor));
+	this.classList.remove('working');
+	const html = await rsp.text();
+
+	const newCursor = rsp.headers.get('imdb-cursor');
+	this.dataset.cursor = newCursor;
+
+	const last = this.closest('li');
+	const ul = this.closest('ul');
+	const more = document.createElement('div');
+	more.innerHTML = html;
+	ul.append(more);
+	ul.append(this.closest('li'));
 });
 })();
 </script>

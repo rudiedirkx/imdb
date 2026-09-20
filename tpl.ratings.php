@@ -1,3 +1,8 @@
+<?php
+
+/** @var list<rdx\imdb\Title> $titles */
+
+?>
 <? foreach ($titles as $title): ?>
 	<li>
 		<img
@@ -11,9 +16,10 @@
 			<span class="rating rated">
 				&#9734; <?= $title->userRating->rating ?? '?' ?> / <?= number_format($title->rating ?? 0, 1) ?>
 			</span>
-			<?if ($title->userRating): ?>
-				<br>
-				(rated on <?= date('Y-m-d', $title->userRating->ratedOn) ?>)
+			<br>
+			(rated on <?= date('Y-m-d', $title->userRating->ratedOn) ?>)
+			<? if ($title->genres): ?>
+				(<?= html(implode(', ', $title->genres)) ?>)
 			<? endif ?>
 		</div>
 	</li>

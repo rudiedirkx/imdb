@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f820f74f57182b986c34218486cee36",
+    "content-hash": "fb7e0a2b3bdc8788e17554942cdfd260",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -547,12 +547,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rudiedirkx/imdb-api-client.git",
-                "reference": "e20ce763392c23e1da9a041a948a9dc1e42f7cd5"
+                "reference": "9413d21cd54aaf467c6756413ee6bff569f47552"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rudiedirkx/imdb-api-client/zipball/e20ce763392c23e1da9a041a948a9dc1e42f7cd5",
-                "reference": "e20ce763392c23e1da9a041a948a9dc1e42f7cd5",
+                "url": "https://api.github.com/repos/rudiedirkx/imdb-api-client/zipball/9413d21cd54aaf467c6756413ee6bff569f47552",
+                "reference": "9413d21cd54aaf467c6756413ee6bff569f47552",
                 "shasum": ""
             },
             "require": {
@@ -586,7 +586,7 @@
                 "issues": "https://github.com/rudiedirkx/imdb-api-client/issues",
                 "source": "https://github.com/rudiedirkx/imdb-api-client/tree/master"
             },
-            "time": "2026-08-21T21:15:58+00:00"
+            "time": "2026-09-20T15:05:50+00:00"
         },
         {
             "name": "rdx/js-dom",
@@ -1026,7 +1026,72 @@
             "time": "2026-03-30T15:36:00+00:00"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "phpstan/phpstan",
+            "version": "2.2.13",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
+                "reference": "9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ondřej Mirtes"
+                },
+                {
+                    "name": "Markus Staab"
+                },
+                {
+                    "name": "Vincent Langlet"
+                }
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-09-03T20:38:19+00:00"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {

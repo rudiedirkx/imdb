@@ -2,7 +2,7 @@
 
 require __DIR__ . '/inc.bootstrap.php';
 
-$person = $client->getGraphqlPerson($_GET['id'] ?? '');
+$person = imdb()->getGraphqlPerson($_GET['id'] ?? '');
 if (!$person) exit("ID not found");
 // dump($person);
 

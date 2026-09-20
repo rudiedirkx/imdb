@@ -5,7 +5,7 @@ use rdx\imdb\Pager;
 require __DIR__ . '/inc.bootstrap.php';
 
 $cursor = $_GET['cursor'] ?? null;
-$items = $client->getWatchlistTitles($pager = new Pager(limit: 200, cursor: $cursor));
+$items = imdb()->getWatchlistTitles($pager = new Pager(limit: 200, cursor: $cursor));
 // dd($items[0]);
 
 if ($cursor) {
@@ -26,7 +26,7 @@ include 'tpl.header.php';
 	<a href="ratings.php">Ratings</a>
 </p>
 
-<p><span id="showing-num"><?= count($items) ?></span> / <?= $client->watchlist->count ?>:</p>
+<p><span id="showing-num"><?= count($items) ?></span> / <?= imdb()->watchlist->count ?>:</p>
 
 <ul class="list">
 	<?php include 'tpl.list-items.php'; ?>

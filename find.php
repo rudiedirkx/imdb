@@ -7,7 +7,7 @@ require __DIR__ . '/inc.bootstrap.php';
 
 $html = '';
 if ( isset($_GET['q']) ) {
-	$results = $client->searchGraphql($_GET['q']);
+	$results = imdb()->searchGraphql($_GET['q']);
 // dump($results);
 
 	$html .= "<ul class='list'>\n";

@@ -1,0 +1,28 @@
+includes:
+	- phpstan-baseline.neon
+parameters:
+	level: 6
+	bootstrapFiles:
+		- phpstan.php
+	typeAliases:
+		AssocArray: 'array<string, mixed>'
+	paths:
+		- ./
+		# - src/
+	excludePaths:
+		- vendor/
+	dynamicConstantNames:
+		- IGNORE_TITLE_COUNTRIES
+		- IGNORE_TITLE_LANGUAGES
+		- IMDB_AT_MAIN
+		- IMDB_PROXY
+		- IMDB_UBID_MAIN
+		- TITLE_COUNTRIES_MAP
+		- VOTING_LOG_FILE
+		- VOTING_PASSWORD
+	treatPhpDocTypesAsCertain: false
+	checkFunctionNameCase: true
+	checkNullables: true
+	# checkExplicitMixed: true
+	# checkImplicitMixed: true
+	reportMaybes: true
