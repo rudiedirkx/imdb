@@ -201,7 +201,7 @@ function maybeAskForPassword(data) {
 }
 
 const genresToggle = document.querySelector('.genres-interests');
-genresToggle.addEventListener('click', function(e) {
+if (genresToggle) genresToggle.addEventListener('click', function(e) {
 	this.classList.toggle('show-interests');
 });
 
